@@ -29,6 +29,7 @@ var langs = {
 		difficulty_long: "Long Words",
 		difficulty_short: "Short Words",
 		difficulty_random: "Random Words",
+		difficulty_first_letter: "First Letter",
 		list: "List All",
 		font_size: "Font Size",
 		normal: "Normal",
@@ -53,6 +54,7 @@ var langs = {
 		difficulty_long: "Les mots longs",
 		difficulty_short: "Mots plus courts",
 		difficulty_random: "Let mots au hasard",
+		difficulty_first_letter: "First Letter",
 		list: "Liste Complète",
 		font_size: "Taille du texte",
 		normal: "Normale",
@@ -77,6 +79,7 @@ var langs = {
 		difficulty_long: "Palabras largas",
 		difficulty_short: "Las palabras más cortas",
 		difficulty_random: "Palabras azar",
+		difficulty_first_letter: "First Letter",
 		list: "Lista Completa",
 		font_size: "Tamaño del texto",
 		normal: "Normal",
@@ -101,6 +104,7 @@ var langs = {
 		difficulty_long: "Lange Wörter",
 		difficulty_short: "Kurze Wörter",
 		difficulty_random: "Zufällige Wörter",
+		difficulty_first_letter: "First Letter",
 		list: "Vollständige Liste",
 		normal: "Normale",
 		large: "Große",
@@ -116,7 +120,9 @@ difficulty levels
 'long_words', 
 'short_words', 
 'random_words', 
-'even_words'
+'even_words',
+'odd_words',
+'first_letter'
 */
 
 var aof = [
@@ -191,7 +197,7 @@ jQuery(document).ready(function($) {
 	
 
 	function update_options(){
-		var	font_size_normal_selected, font_size_large_selected, font_size_small_selected, d_a_selected, d_l_selected, d_s_selected, d_r_selected = '';
+		var	font_size_normal_selected, font_size_large_selected, font_size_small_selected, d_a_selected, d_l_selected, d_s_selected, d_r_selected, d_fs_selected = '';
 		if (font_size == 'large'){
 			font_size_large_selected = 'selected';
 		}
@@ -210,6 +216,9 @@ jQuery(document).ready(function($) {
 		}
 		else if (difficulty == langs['english'].difficulty_random ){
 			d_r_selected = 'selected';
+		}
+		else if (difficulty == langs['english'].difficulty_first_letter ){
+			d_fs_selected = 'selected';
 		}
 		else{
 			d_a_selected = 'selected';
@@ -245,6 +254,7 @@ jQuery(document).ready(function($) {
 				options_content += '<option value="' + langs['english'].difficulty_long + '" ' + d_l_selected + '>' + langs[language].difficulty_long + '</option>';
 				options_content += '<option value="' + langs['english'].difficulty_short + '" ' + d_s_selected + '>' + langs[language].difficulty_short + '</option>';
 				options_content += '<option value="' + langs['english'].difficulty_random + '" ' + d_r_selected + '>' + langs[language].difficulty_random + '</option>';
+				options_content += '<option value="' + langs['english'].difficulty_first_letter + '" ' + d_fs_selected + '>' + langs[language].difficulty_first_letter + '</option>';
 			options_content += '</select></label>';
 		options_content += '</div>';
 
@@ -367,6 +377,11 @@ jQuery(document).ready(function($) {
 				}
 			}
 		}
+		else if (difficulty == langs['english'].difficulty_first_letter ){
+			for (var i = 0; i < random_article_words.length; i++){
+				content += '<span class="word" data-absolute_order="' + random_article_words[i].absolute_order + '" data-order="' + random_article_words[i].order + '">' + random_article_words[i].word + '</span>';
+			}
+		}
 		//default - normal - all words
 		else{
 			for (var i = 0; i < random_article_words.length; i++){
@@ -411,6 +426,11 @@ jQuery(document).ready(function($) {
 				}
 			}
 		}
+		else if (difficulty == langs['english'].difficulty_first_letter ){
+			for (var i = 0; i < random_article_words.length; i++){
+				add_to_ordered_dd(random_article_words[i].absolute_order, random_article_words[i].order, random_article_words[i].word, true);
+			}
+		}
 		else {
 			//nothing - all words are unordered
 			clicked = 0;
@@ -442,11 +462,16 @@ jQuery(document).ready(function($) {
 		console.log( clicked );
 
 	}
-	function add_to_ordered_dd(absolute_order, order, word){
+	function add_to_ordered_dd(absolute_order, order, word, letter_only){
 		var blank_class = '';
-		console.log('before', $('.ordered').text() );
+		//console.log('before', $('.ordered').text() );
 		if ( word == undefined || word == null || word == blank_string ) {
 			word = blank_string;
+			blank_class='blank';
+		}
+		if ( letter_only != undefined || letter_only != null || letter_only == true ) {
+			var letter = word.charAt(0);
+			word = letter + blank_string;
 			blank_class='blank';
 		}
 		word_html = '<span class="word ' + blank_class + '" data-absolute_order="' + absolute_order + '" data-order="' + order + '">' + word + '</span>';
@@ -465,27 +490,28 @@ jQuery(document).ready(function($) {
 					//console.log(i, order, $(this).data('order'));
 					if (!added){
 						//this order is already here and is "___", replace it
-						if ( parseInt($(this).data('absolute_order')) == order && $(this).text() == blank_string ) {
-							console.log(word, order, 'replacewith', $(this).data('absolute_order'), $(this).text());
+						if ( parseInt($(this).data('absolute_order')) == order && $(this).hasClass('blank') ) {
+							//console.log(word, order, 'replacewith', $(this).data('absolute_order'), $(this).text());
 							$(this).replaceWith(word_html);
+							$(this).removeClass('blank');
 							added = true;
-		console.log('after', $('.ordered').text() );
+		//console.log('after', $('.ordered').text() );
 							return true;
 						}
 						//this order already here but not a blank spot, check the next index or order
-						else if ( parseInt($(this).data('absolute_order')) == order && $(this).text() != blank_string ){
+						else if ( parseInt($(this).data('absolute_order')) == order && !$(this).hasClass('blank') ){
 							//nothing - order will be incremented and checked again next go around in the for j loop
-							console.log(word, order, 'match found but not blank so continue from here with next order value', $(this).data('absolute_order'), $(this).text());
+							//console.log(word, order, 'match found but not blank so continue from here with next order value', $(this).data('absolute_order'), $(this).text());
 							j++;
 							order = parseInt(order_ar[j]);
 							//return true;
 						}
 						//found a higher order data attribte, add this one before that one
 						else if ( parseInt($(this).data('absolute_order')) > order ) {
-							console.log(word, order, 'inserted before', $(this).data('absolute_order'), $(this).text());
+							//console.log(word, order, 'inserted before', $(this).data('absolute_order'), $(this).text());
 							$(this).before(word_html);
 							added = true;
-		console.log('after', $('.ordered').text() );
+		//console.log('after', $('.ordered').text() );
 							return true;
 						}
 						else{
@@ -498,17 +524,17 @@ jQuery(document).ready(function($) {
 			//}
 			//no place to insert, add it to the end - the order is after the last word 
 			if (!added) {
-				console.log(word, order, 'appended to end');
+				//console.log(word, order, 'appended to end');
 				$('.ordered').append(word_html);
-		console.log('after', $('.ordered').text() );
+		//console.log('after', $('.ordered').text() );
 				return true;
 			}
 		}
 		//no words yet, add this first one
 		else {
 			$('.ordered').html(word_html)
-			console.log(word, 'added first one', absolute_order, order);
-		console.log('after', $('.ordered').text() );
+			//console.log(word, 'added first one', absolute_order, order);
+		//console.log('after', $('.ordered').text() );
 			return true;
 		}
 	}
@@ -516,10 +542,12 @@ jQuery(document).ready(function($) {
 
 	$('.content').on('click touchstart', '.unordered .word', function(e){
 		if (!touching) {
+		//uncomment for desktop testing
+		//if (true){
 			touching = true;
 			quiz_guesses_total++;
 			var this_order = $(this).data('order');
-			//console.log(this_order);
+			console.log(this_order, clicked, this_order.indexOf("," + clicked + ","));
 			//simple order
 			// if ( this_order == clicked ) {
 			// 	$(this).addClass('clicked');
