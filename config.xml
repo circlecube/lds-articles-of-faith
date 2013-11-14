@@ -2,8 +2,8 @@
     <widget xmlns = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.circlecube.articlesoffaith"
-        versionCode="210" 
-        version   = "0.2.1">
+        versionCode="220" 
+        version   = "0.2.2">
 
     <name>LDS Articles of Faith</name>
 
@@ -14,7 +14,7 @@
     <author href="http://circlecube.com" email="evan@circlecube.com">
         Evan Mullins 
     </author>
-
+    <gap:plugin name="com.adobe.plugins.gaplugin" />
     <gap:platform name="android" />
     <preference name="phonegap-version" value="3.0.0" />
     <icon src="icon-large.png" />

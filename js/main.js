@@ -1,6 +1,14 @@
 /*
 
 */
+//https://github.com/phonegap-build/GAPlugin/blob/c928e353feb1eb75ca3979b129b10b216a27ad59/README.md
+var gaPlugin;
+
+function onDeviceReady() {
+    gaPlugin = window.plugins.gaPlugin;
+    gaPlugin.init(successHandler, errorHandler, "UA-1466312-11", 10);
+}
+//gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Button", "Click", "event only", 1);
 var touching = false;
 var language = 'english';
 var font_size = 'normal';
@@ -54,7 +62,7 @@ var langs = {
 		difficulty_long: "Les mots longs",
 		difficulty_short: "Mots plus courts",
 		difficulty_random: "Let mots au hasard",
-		difficulty_first_letter: "First Letter",
+		difficulty_first_letter: "Première Lettre",
 		list: "Liste Complète",
 		font_size: "Taille du texte",
 		normal: "Normale",
@@ -79,7 +87,7 @@ var langs = {
 		difficulty_long: "Palabras largas",
 		difficulty_short: "Las palabras más cortas",
 		difficulty_random: "Palabras azar",
-		difficulty_first_letter: "First Letter",
+		difficulty_first_letter: "Primera Letra",
 		list: "Lista Completa",
 		font_size: "Tamaño del texto",
 		normal: "Normal",
@@ -104,7 +112,7 @@ var langs = {
 		difficulty_long: "Lange Wörter",
 		difficulty_short: "Kurze Wörter",
 		difficulty_random: "Zufällige Wörter",
-		difficulty_first_letter: "First Letter",
+		difficulty_first_letter: "Erster Buchstabe",
 		list: "Vollständige Liste",
 		normal: "Normale",
 		large: "Große",
@@ -570,7 +578,10 @@ jQuery(document).ready(function($) {
 				$('.unordered').addClass('empty');
 				$('.button_skip').text( langs[language].next );
 				$('.button_skip').after( "<div class='button button_again'>" + langs[language].again + "</div>" );
-				$('dt').append(" - " + parseInt( (quiz_guesses_correct / quiz_guesses_total) * 100 ) + "%");
+				var score = parseInt( (quiz_guesses_correct / quiz_guesses_total) * 100 );
+				$('dt').append(" - " + score + "%");
+
+				gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Level", "Finish", quiz_article, score);
 			}
 			//console.log('score :', quiz_guesses_correct / quiz_guesses_total);
 		}
