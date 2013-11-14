@@ -140,7 +140,7 @@ jQuery(document).ready(function($) {
 		});
 	}
 
-	$('.content').on('click touch', 'article dt', function(e){
+	$('.content').on('click touchstart', 'article dt', function(e){
 		$(this).next('dd').slideToggle();
 		$(this).toggleClass('active');
 	});
@@ -161,7 +161,7 @@ jQuery(document).ready(function($) {
 		$('.options').toggleClass('active');
 	})
 
-	$('body').on('click touch', '.button_game, .button_skip', function(e){
+	$('body').on('click touchstart', '.button_game, .button_skip', function(e){
 		game_aofs();
 	});
 
@@ -185,11 +185,11 @@ jQuery(document).ready(function($) {
 		console.log(clicked);
 	}
 
-	$('.button_list').on('click touch', function(){
+	$('.button_list').on('click touchstart', function(){
 		list_aofs();
 	});
 
-	$('.content').on('click touch', '.unordered .word', function(e){
+	$('.content').on('click touchstart', '.unordered .word', function(e){
 		var this_order = $(this).data('order');
 		console.log(this_order);
 		//simple order

@@ -315,7 +315,8 @@ textarea {
 /* animate these */
 .options,
 .content dt,
-.button {
+.button,
+.word {
   -webkit-transition: all 0.3s ease-out;  /* Saf3.2+, Chrome */
      -moz-transition: all 0.3s ease-out;  /* FF4+ */
       -ms-transition: all 0.3s ease-out;  /* IE10 */
@@ -428,12 +429,14 @@ body.font-small {
     display: inline-block;
     margin: 1em;
     cursor: pointer;
+    clear:both;
 }
-.button:hover{
+.button:hover,
+.button:active{
     background: #3333ff;    
 }
 
-.word{
+.word {
     background: #fff;
     display: inline-block;
     padding: .5em 1em;
@@ -455,4 +458,8 @@ body.font-small {
 }
 .unordered .word {
     cursor: pointer;
+}
+.word:active{
+    background:#339944;
+    color:#fff;
 }
