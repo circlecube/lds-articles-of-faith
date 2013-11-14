@@ -1,6 +1,7 @@
 /*
 
 */
+var touching = false;
 var language = 'english';
 var font_size = 'normal';
 var long_word_length = 3;
@@ -302,6 +303,12 @@ jQuery(document).ready(function($) {
 		list_aofs();
 		$('.options').removeClass('active');
 	});
+	$('body').on('touchstart', function(){
+		//touching = true;
+	});
+	$('body').on('touchend', function(){
+		touching = false;
+	});
 	$('body').on('click touch', '.button_game', function(e){
 		//console.log($(this).data('id') );
 		if( $(this).data('id') != undefined ){
@@ -507,35 +514,38 @@ jQuery(document).ready(function($) {
 	}
 
 
-	$('.content').on('click touch', '.unordered .word', function(e){
-		quiz_guesses_total++;
-		var this_order = $(this).data('order');
-		//console.log(this_order);
-		//simple order
-		// if ( this_order == clicked ) {
-		// 	$(this).addClass('clicked');
-		// 	clicked++;
-		// }
-		//multiple order
-		if( this_order.indexOf("," + clicked + ",") != -1 ) {
-			quiz_guesses_correct++;
-			//$(this).addClass('clicked');
-			//remove clicked word and append to a preceding div
-			//$('.ordered').append( $(this) );
-			add_to_ordered_dd( clicked, $(this).data('order'), $(this).text() );
-			$(this).remove();
-			//clicked++;
+	$('.content').on('click touchstart', '.unordered .word', function(e){
+		if (!touching) {
+			touching = true;
+			quiz_guesses_total++;
+			var this_order = $(this).data('order');
+			//console.log(this_order);
+			//simple order
+			// if ( this_order == clicked ) {
+			// 	$(this).addClass('clicked');
+			// 	clicked++;
+			// }
+			//multiple order
+			if( this_order.indexOf("," + clicked + ",") != -1 ) {
+				quiz_guesses_correct++;
+				//$(this).addClass('clicked');
+				//remove clicked word and append to a preceding div
+				//$('.ordered').append( $(this) );
+				add_to_ordered_dd( clicked, $(this).data('order'), $(this).text() );
+				$(this).remove();
+				//clicked++;
+			}
+				update_clicked();
+			//console.log($('.unordered .word').length);
+			//show next
+			if ( $('.unordered .word').length < 1) {
+				$('.unordered').addClass('empty');
+				$('.button_skip').text( langs[language].next );
+				$('.button_skip').after( "<div class='button button_again'>" + langs[language].again + "</div>" );
+				$('dt').append(" - " + parseInt( (quiz_guesses_correct / quiz_guesses_total) * 100 ) + "%");
+			}
+			//console.log('score :', quiz_guesses_correct / quiz_guesses_total);
 		}
-			update_clicked();
-		//console.log($('.unordered .word').length);
-		//show next
-		if ( $('.unordered .word').length < 1) {
-			$('.unordered').addClass('empty');
-			$('.button_skip').text( langs[language].next );
-			$('.button_skip').after( "<div class='button button_again'>" + langs[language].again + "</div>" );
-			$('dt').append(" - " + parseInt( (quiz_guesses_correct / quiz_guesses_total) * 100 ) + "%");
-		}
-		//console.log('score :', quiz_guesses_correct / quiz_guesses_total);
 	});
 
 
