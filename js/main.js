@@ -218,10 +218,13 @@ jQuery(document).ready(function($) {
 		list_aofs();
 		$('.options').removeClass('active');
 	});
-	$('.options').on('click touch', '.button_game, .button_skip', function(e){
+	$('.options').on('click touch', '.button_game', function(e){
 		game_aofs();
 		quiz_article = -1;
 		$('.options').removeClass('active');
+	});
+	$('.content').on('click touch', '.button_skip', function(e){
+		game_aofs();
 	});
 	$('.options_toggle').on('click', function(){
 		$('.options').toggleClass('active');

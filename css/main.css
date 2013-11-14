@@ -426,7 +426,8 @@ body.font-small {
     color: #fff;
     text-transform: uppercase;
     padding: .5em 2em;
-    display: inline-block;
+    display: block;
+    width:auto;
     margin: 1em;
     cursor: pointer;
     clear:both;
@@ -458,6 +459,9 @@ body.font-small {
 }
 .unordered .word {
     cursor: pointer;
+}
+.unordered.empty {
+    padding:0;
 }
 .word:active{
     background:#339944;
