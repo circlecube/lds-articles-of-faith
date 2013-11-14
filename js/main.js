@@ -6,37 +6,76 @@ var clicked;
 var quiz_article = -1;
 var langs = {
 	english: { 
-		language: "English", 
+		language_native: "English", 
 		language_english: "English", 
 		ordinals: ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th", "13th"],
 		title: "Article of Faith", 
 		title_plural: "13 Articles of Faith", 
 		church: "The Church of Jesus Christ of Latter-day Saints",
-		about_text: "<h1>The Articles of Faith</h1><p>One of the first things we’re taught as children are the Articles of Faith — 13 statements that summarize our fundamental beliefs.</p><p>The Prophet Joseph Smith wrote them in a letter to a newspaper editor, John Wentworth, who had asked for information about the Church.</p><p>Ever since the Articles of Faith were written, they’ve inspired and directed us in the basic principles of our gospel. They enhance our understanding of certain doctrines and help us commit to living them. They invite further thought. And they’re a good tool for explaining our beliefs to people unfamiliar with them.</p>"
+		about_text: "<p>One of the first things we’re taught as children are the Articles of Faith — 13 statements that summarize our fundamental beliefs.</p><p>The Prophet Joseph Smith wrote them in a letter to a newspaper editor, John Wentworth, who had asked for information about the Church.</p><p>Ever since the Articles of Faith were written, they’ve inspired and directed us in the basic principles of our gospel. They enhance our understanding of certain doctrines and help us commit to living them. They invite further thought. And they’re a good tool for explaining our beliefs to people unfamiliar with them.</p>",
+		skip: "Skip",
+		next: "Continue",
+		quiz: "Quiz",
+		list: "List All",
+		font_size: "Font Size",
+		normal: "Normal",
+		large: "Large",
+		small: "Small",
+		language_string: "Language"
 	},
 	french: { 
-		language: "Français", 
+		language_native: "Français", 
 		language_english: "French", 
 		ordinals: ["1er", "2e", "3e", "4e", "5e", "6e", "7e", "8e", "9e", "10e", "11e", "12e", "13e"],
 		title: "Article de Foi", 
 		title_plural: "Treize articles de foi", 
-		church: "L'ÉGLISE DE JÉSUS-CHRIST DES SAINTS DES DERNIERS JOURS" 
+		church: "L'ÉGLISE DE JÉSUS-CHRIST DES SAINTS DES DERNIERS JOURS" ,
+		about_text: "<p>Les Articles de Foi font partie des premières choses que l’on nous enseigne dans notre enfance : ces treize déclarations résument nos croyances fondamentales.</p><p>Deux ans avant de mourir, Joseph Smith, le prophète, les communiqua par lettre à John Wentworth, rédacteur en chef d’un journal, qui lui avait demandé des renseignements sur l’Église.</p><p>Depuis ce jour, les Articles de Foi sont une source d’inspiration pour les gens qui veulent obéir aux principes fondamentaux de l’Évangile. Grâce aux Articles de Foi, nous comprenons mieux certains points de doctrine et nous nous engageons réellement à vivre les principes de l’Évangile. Nous nous sentons poussés à réfléchir davantage. Enfin, les Articles de Foi sont un bon moyen d’expliquer nos croyances aux personnes qui les connaissent peu.</p>",
+		skip: "Passer",
+		next: "Continuer",
+		quiz: "Quiz",
+		list: "Liste Complète",
+		font_size: "Taille du texte",
+		normal: "Normale",
+		large: "Grand",
+		small: "Petit",
+		language_string: "Langue"
 	},
 	spanish: { 
-		language: "Español", 
+		language_native: "Español", 
 		language_english: "Spanish", 
 		ordinals: ["1°", "2°", "3°", "4°", "5°", "6°", "7°", "8°", "9°", "10°", "11°", "12°", "13°"],
 		title: "Artículo de Fe", 
 		title_plural: "13 Artículos de Fe", 
-		church: "LA IGLESIA DE JESUCRISTO DE LOS SANTOS DE LOS ÚLTIMOS DÍAS" 
+		church: "LA IGLESIA DE JESUCRISTO DE LOS SANTOS DE LOS ÚLTIMOS DÍAS" ,
+		about_text: "<p>Algunas de las primeras cosas que se nos enseñan de niños son los Artículos de Fe: son trece declaraciones que resumen nuestras creencias fundamentales.</p><p>Dos años antes de su muerte, el profeta José Smith los escribió en una carta que dirigió a John Wentworth, director de un periódico, quien había solicitado información acerca de la Iglesia.</p><p>Desde que se redactaron los Artículos de Fe, nos han servido de inspiración y de guía en cuanto a los principios básicos del Evangelio. Amplían nuestro entendimiento de ciertas doctrinas y nos ayudan a comprometernos a vivirlas. Nos invitan a reflexionar. Además, son un buen recurso para explicar nuestras creencias a las personas que no las conocen.</p>",
+		skip: "Pasar",
+		next: "Continuar",
+		quiz: "Examen",
+		list: "Lista Completa",
+		font_size: "Tamaño del texto",
+		normal: "Normal",
+		large: "Grande",
+		small: "Pequeño",
+		language_string: "Idioma"
 	},
 	german: { 
-		language: "Deutsch", 
+		language_native: "Deutsch", 
 		language_english: "German", 
 		ordinals: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"],
 		title: "Die Glaubensartikel", 
 		title_plural: "Die 13 Glaubensartikel",
-		church: "KIRCHE JESU CHRISTI DER HEILIGEN DER LETZTEN TAGE" 
+		church: "KIRCHE JESU CHRISTI DER HEILIGEN DER LETZTEN TAGE" ,
+		about_text: "<p>Wir lernen bereits als Kind jene dreizehn Aussagen, in denen unsere grundlegenden Glaubensansichten zusammengefasst sind.</p><p>Der Prophet Joseph Smith schrieb sie zwei Jahre vor seinem Tod in einem Brief an John Wentworth nieder, den Herausgeber einer Zeitung, der um Informationen bezüglich der Kirche gebeten hatte.</p><p>Seit damals, als die Glaubensartikel verfasst worden sind, weisen sie auf die grundlegenden Evangeliumsprinzipien hin. Sie helfen uns, bestimmte Lehren besser zu verstehen und bereitwillig danach zu leben. Sie regen dazu an, sich tiefere Gedanken zu machen. Und sie sind ein gutes Hilfsmittel, jemandem, der unsere Lehre nicht so gut kennt, diese zu erläutern.</p>",
+		skip: "überspringen",
+		next: "Weiter",
+		quiz: "Quiz",
+		list: "Vollständige Liste",
+		normal: "Normale",
+		large: "Große",
+		small: "Wenig",
+		font_size: "Textgröße",
+		language_string: "Sprache"
 	},
 };
 
@@ -111,16 +150,34 @@ var aof = [
 jQuery(document).ready(function($) {
 	
 
-	function create_options(){
-		$('.option_language').html(function(){
-			var options = '';
-			for (var lang in langs) {
-			//console.log(lang, [lang].language, langs[lang].language);
-			   options += "<option value='" + lang + "'>" + langs[lang].language + "</option>";
-			}
+	function update_options(){
+		var options_content = '';
+		options_content += '<div class="option">';
+			options_content += '<h3>' + langs[language].language_string + '</h3>';
+			options_content += '<select class="option_language">';
+				for (var lang in langs) {
+					var selected = '';
+					if (language == lang){
+						selected = ' selected';
+					}
+				   options_content += "<option value='" + lang + "' " + selected + ">" + langs[lang].language_native + "</option>";
+				}
+			options_content += '</select>';
+		options_content += '</div>';
+		options_content += '<div class="option">';
+			options_content += '<h3>' + langs[language].font_size + '</h3>';
+			options_content += '<select class="option_font_size">';
+				options_content += '<option value="" selected>' + langs[language].normal + '</option>';
+				options_content += '<option value="large">' + langs[language].large + '</option>';
+				options_content += '<option value="small">' + langs[language].small + '</option>';
+			options_content += '</select>';
+		options_content += '</div>';
 
-			return options;
-		});
+		options_content += '<div class="option">';
+			options_content += '<div class="button button_game">' + langs[language].quiz + '</div>';
+			options_content += '<div class="button button_list">' + langs[language].list + '</div>';
+		options_content += '</div>';
+		$('.options').html(options_content);
 	}
 
 	function list_aofs(){
@@ -129,7 +186,7 @@ jQuery(document).ready(function($) {
 		for(var i=0; i<aof.length; i++){
 			aofs += "<article class='aof_" + i + "'>";
 			aofs += "<dt>" + langs[language].ordinals[i] + " " + langs[language].title + "</dt>";
-			aofs += "<dd>" + aof[i][language] + "</dd>";
+			aofs += "<dd style='display:none;'>" + aof[i][language] + "</dd>";
 			aofs += "</article>";
 		}
 
@@ -140,30 +197,35 @@ jQuery(document).ready(function($) {
 		});
 	}
 
-	$('.content').on('click touchstart', 'article dt', function(e){
+	$('.content').on('click touch', 'article dt', function(e){
 		$(this).next('dd').slideToggle();
 		$(this).toggleClass('active');
 	});
 
-	$('.option_font_size').on('change', function(){
-		console.log('font size update:', $(this).val() );
+	$('.options').on('change', '.option_font_size', function(){
+		//console.log('font size update:', $(this).val() );
 		$('body').attr('class', '');
 		$('body').addClass(  'font-' + $(this).val() );
-		$('.options').toggleClass('active');
+		$('.options').removeClass('active');
 	});
-	$('.option_language').on('change', function(){
-		console.log('language change:', $(this).val() );
+	$('.options').on('change', '.option_language', function(){
+		//console.log('language change:', $(this).val() );
 		language = $(this).val();
+		$('.content').html('');
+		update_options();
+	});
+	$('.options').on('click touch', '.button_list', function(){
 		list_aofs();
-		$('.options').toggleClass('active');
+		$('.options').removeClass('active');
+	});
+	$('.options').on('click touch', '.button_game, .button_skip', function(e){
+		game_aofs();
+		quiz_article = -1;
+		$('.options').removeClass('active');
 	});
 	$('.options_toggle').on('click', function(){
 		$('.options').toggleClass('active');
 	})
-
-	$('body').on('click touchstart', '.button_game, .button_skip', function(e){
-		game_aofs();
-	});
 
 	function game_aofs(){
 		quiz_article++;
@@ -172,22 +234,19 @@ jQuery(document).ready(function($) {
 		}
 		var random_article = Math.floor( aof.length * Math.random() );
 		var random_article_words = randomize_aof( quiz_article );
-		var content = '<h1>Pop Quiz</h1>';
+		var content = '<h1>' + langs[language].quiz + '</h1>';
 		content += '<dt>' + langs[language].ordinals[quiz_article] + " " + langs[language].title + '</dt><dd class="ordered"></dd><dd class="unordered">';
 		for (var i = 0; i < random_article_words.length; i++){
 			content += '<span class="word" data-order="' + random_article_words[i].order + '">' + random_article_words[i].word + '</span>';
 		}
 		content += '</dd>';
-		content += '<div class="button button_skip">Skip</div>';
+		content += '<div class="button button_skip">' + langs[language].skip + '</div>';
 		$('.content').html( content );
 		$('.options').removeClass('active');
 		clicked = 0;
 		console.log(clicked);
 	}
 
-	$('.button_list').on('click touchstart', function(){
-		list_aofs();
-	});
 
 	$('.content').on('click touchstart', '.unordered .word', function(e){
 		var this_order = $(this).data('order');
@@ -207,7 +266,8 @@ jQuery(document).ready(function($) {
 		console.log($('.unordered .word').length);
 		//show next
 		if ( $('.unordered .word').length < 1) {
-			$('.unordered').html('<div class="button button_game">Continue</div>');
+			$('.unordered').addClass('empty');
+			$('.button_skip').text( langs[language].next );
 		}
 	});
 
@@ -265,7 +325,7 @@ jQuery(document).ready(function($) {
 
 
 	function init(){
-		create_options();
+		update_options();
 		$('.options').toggleClass('active');
 	}
 
