@@ -314,7 +314,8 @@ textarea {
 }
 /* animate these */
 .options,
-.content dt {
+.content dt,
+.button {
   -webkit-transition: all 0.3s ease-out;  /* Saf3.2+, Chrome */
      -moz-transition: all 0.3s ease-out;  /* FF4+ */
       -ms-transition: all 0.3s ease-out;  /* IE10 */
@@ -414,4 +415,44 @@ body.font-large {
 }
 body.font-small {
     font-size: 12px;
+}
+
+.button {
+    border: 1px solid rgba(0,0,0,.33);
+    border-width: 0 1px 1px 0;
+    border-radius: 1em;
+    background: #3366ee;
+    color: #fff;
+    text-transform: uppercase;
+    padding: .5em 2em;
+    display: inline-block;
+    margin: 1em;
+    cursor: pointer;
+}
+.button:hover{
+    background: #3333ff;    
+}
+
+.word{
+    background: #fff;
+    display: inline-block;
+    padding: .5em 1em;
+    border: 1px solid #339944;
+    border-radius: 1em;
+    margin: .5em;
+}
+.content .ordered {
+    background: #339944;
+    padding:.5em;
+    overflow:hidden;
+}
+.ordered .word {
+    background: #339944;
+    color: #fff;
+    margin: 0;
+    border-radius:0;
+    padding: .5em .25em;
+}
+.unordered .word {
+    cursor: pointer;
 }

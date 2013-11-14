@@ -1,6 +1,9 @@
 /*
 
 */
+var language = 'english';
+var clicked;
+var quiz_article = -1;
 var langs = {
 	english: { 
 		language: "English", 
@@ -36,8 +39,6 @@ var langs = {
 		church: "KIRCHE JESU CHRISTI DER HEILIGEN DER LETZTEN TAGE" 
 	},
 };
-
-
 
 var aof = [
 	{ aof: 1,   
@@ -108,13 +109,13 @@ var aof = [
 ];
 
 jQuery(document).ready(function($) {
-	var language = 'english';
+	
 
 	function create_options(){
 		$('.option_language').html(function(){
 			var options = '';
 			for (var lang in langs) {
-			console.log(lang, [lang].language, langs[lang].language);
+			//console.log(lang, [lang].language, langs[lang].language);
 			   options += "<option value='" + lang + "'>" + langs[lang].language + "</option>";
 			}
 
@@ -160,7 +161,113 @@ jQuery(document).ready(function($) {
 		$('.options').toggleClass('active');
 	})
 
-	create_options();
-	list_aofs();
+	$('body').on('click touch', '.button_game, .button_skip', function(e){
+		game_aofs();
+	});
 
+	function game_aofs(){
+		quiz_article++;
+		if (quiz_article > 12){
+			quiz_article = 0;
+		}
+		var random_article = Math.floor( aof.length * Math.random() );
+		var random_article_words = randomize_aof( quiz_article );
+		var content = '<h1>Pop Quiz</h1>';
+		content += '<dt>' + langs[language].ordinals[quiz_article] + " " + langs[language].title + '</dt><dd class="ordered"></dd><dd class="unordered">';
+		for (var i = 0; i < random_article_words.length; i++){
+			content += '<span class="word" data-order="' + random_article_words[i].order + '">' + random_article_words[i].word + '</span>';
+		}
+		content += '</dd>';
+		content += '<div class="button button_skip">Skip</div>';
+		$('.content').html( content );
+		$('.options').removeClass('active');
+		clicked = 0;
+		console.log(clicked);
+	}
+
+	$('.button_list').on('click touch', function(){
+		list_aofs();
+	});
+
+	$('.content').on('click touch', '.unordered .word', function(e){
+		var this_order = $(this).data('order');
+		console.log(this_order);
+		//simple order
+		// if ( this_order == clicked ) {
+		// 	$(this).addClass('clicked');
+		// 	clicked++;
+		// }
+		//multiple order
+		if( this_order.indexOf("," + clicked + ",") != -1 ) {
+			$(this).addClass('clicked');
+			clicked++;
+			//remove clicked word and append to a preceding div
+			$('.ordered').append( $(this) );
+		}
+		console.log($('.unordered .word').length);
+		//show next
+		if ( $('.unordered .word').length < 1) {
+			$('.unordered').html('<div class="button button_game">Continue</div>');
+		}
+	});
+
+
+	function randomize_aof(article){
+		//console.log('randomize_aof()');
+		//split article into array of words in correct order
+		var article_word = aof[article][language].split(' ');
+		var article_words = [];
+		//copy words into array with correct order vars
+		for (var i = 0; i < article_word.length; i++){
+			article_words.push({ word: article_word[i], order: i });
+		}
+		//console.log(article_words);
+		article_words.sort(
+			function compare(a,b) {
+			  if (a.word < b.word)
+			     return -1;
+			  if (a.word > b.word)
+			    return 1;
+			  return 0;
+			}
+		);
+		//console.log(article_words);
+		for (var i = 0; i < article_words.length; i++){
+			console.log(article_words[i].word);
+			if ( i < article_words.length-1 && article_words[i].word == article_words[i+1].word ){
+				var j,k = i;
+				var ik_order = ',';
+				for (j = i; j < article_words.length;j++){
+					if ( article_words[i].word == article_words[j].word ){
+						k=j;
+						ik_order += article_words[j].order + ',';
+						console.log(ik_order);
+					}
+				}
+				for (j = i; j <= k; j++){
+					article_words[j].order = ik_order;
+				}	
+				i = k;
+			}
+			else{
+				article_words[i].order = ',' + article_words[i].order + ',';
+				console.log(article_words[i].order);
+			}
+		}
+		article_words.sort(
+			function() {
+				return 0.5 - Math.random();
+			}
+		);
+		return article_words;
+
+	}
+
+
+	function init(){
+		create_options();
+		$('.options').toggleClass('active');
+	}
+
+	init();
 });
