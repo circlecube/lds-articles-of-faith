@@ -2,13 +2,13 @@
     <widget xmlns = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.circlecube.articlesoffaith"
-        versionCode="170" 
-        version   = "0.1.7">
+        versionCode="190" 
+        version   = "0.1.9">
 
     <name>LDS Articles of Faith</name>
 
     <description>
-        An easy to use collection of the 13 Articles of Faith of the Church of Jesus Christ of Latter-Day Saints. This displays the articles of faith in 4 languages: English, Spanish, French and German. Great tool for memorizing the article of faith. Also options to change font size for easier readability.
+        An easy to use tool to learn or memorize all of the 13 Articles of Faith of the Church of Jesus Christ of Latter-Day Saints. This displays the articles of faith to read. Supports 4 languages: English, Spanish, French and German. Great tool for memorizing the article of faith, see the scrambled article of faith and select the words in the correct order. Also options to change font size for easier readability.
     </description>
 
     <author href="http://circlecube.com" email="evan@circlecube.com">
@@ -17,6 +17,8 @@
 
     <gap:platform name="android" />
     <preference name="phonegap-version" value="3.0.0" />
+    <icon src="icon-large.png" />
+    <gap:splash src="splash.png" />
     <preference name="orientation" value="default" />
     <preference name="fullscreen" value="true" />
     <icon src="apple-touch-icon-precomposed.png" />

@@ -2,8 +2,14 @@
 
 */
 var language = 'english';
+var font_size = 'normal';
+var long_word_length = 3;
+var short_word_length = 4;
 var clicked;
 var quiz_article = -1;
+var quiz_guesses_total = 0;
+var quiz_guesses_correct = 0;
+var blank_string = '___';
 var langs = {
 	english: { 
 		language_native: "English", 
@@ -15,7 +21,13 @@ var langs = {
 		about_text: "<p>One of the first things we’re taught as children are the Articles of Faith — 13 statements that summarize our fundamental beliefs.</p><p>The Prophet Joseph Smith wrote them in a letter to a newspaper editor, John Wentworth, who had asked for information about the Church.</p><p>Ever since the Articles of Faith were written, they’ve inspired and directed us in the basic principles of our gospel. They enhance our understanding of certain doctrines and help us commit to living them. They invite further thought. And they’re a good tool for explaining our beliefs to people unfamiliar with them.</p>",
 		skip: "Skip",
 		next: "Continue",
+		again: "Again",
 		quiz: "Quiz",
+		difficulty: "Difficulty",
+		difficulty_all: "All Words",
+		difficulty_long: "Long Words",
+		difficulty_short: "Short Words",
+		difficulty_random: "Random Words",
 		list: "List All",
 		font_size: "Font Size",
 		normal: "Normal",
@@ -33,7 +45,13 @@ var langs = {
 		about_text: "<p>Les Articles de Foi font partie des premières choses que l’on nous enseigne dans notre enfance : ces treize déclarations résument nos croyances fondamentales.</p><p>Deux ans avant de mourir, Joseph Smith, le prophète, les communiqua par lettre à John Wentworth, rédacteur en chef d’un journal, qui lui avait demandé des renseignements sur l’Église.</p><p>Depuis ce jour, les Articles de Foi sont une source d’inspiration pour les gens qui veulent obéir aux principes fondamentaux de l’Évangile. Grâce aux Articles de Foi, nous comprenons mieux certains points de doctrine et nous nous engageons réellement à vivre les principes de l’Évangile. Nous nous sentons poussés à réfléchir davantage. Enfin, les Articles de Foi sont un bon moyen d’expliquer nos croyances aux personnes qui les connaissent peu.</p>",
 		skip: "Passer",
 		next: "Continuer",
+		again: "Refaire",
 		quiz: "Quiz",
+		difficulty: "Difficulté",
+		difficulty_all: "Tous les mots",
+		difficulty_long: "Les mots longs",
+		difficulty_short: "Mots plus courts",
+		difficulty_random: "Let mots au hasard",
 		list: "Liste Complète",
 		font_size: "Taille du texte",
 		normal: "Normale",
@@ -51,7 +69,13 @@ var langs = {
 		about_text: "<p>Algunas de las primeras cosas que se nos enseñan de niños son los Artículos de Fe: son trece declaraciones que resumen nuestras creencias fundamentales.</p><p>Dos años antes de su muerte, el profeta José Smith los escribió en una carta que dirigió a John Wentworth, director de un periódico, quien había solicitado información acerca de la Iglesia.</p><p>Desde que se redactaron los Artículos de Fe, nos han servido de inspiración y de guía en cuanto a los principios básicos del Evangelio. Amplían nuestro entendimiento de ciertas doctrinas y nos ayudan a comprometernos a vivirlas. Nos invitan a reflexionar. Además, son un buen recurso para explicar nuestras creencias a las personas que no las conocen.</p>",
 		skip: "Pasar",
 		next: "Continuar",
+		again: "Rehacer",
 		quiz: "Examen",
+		difficulty: "Dificultad",
+		difficulty_all: "Todas las Palabras",
+		difficulty_long: "Palabras largas",
+		difficulty_short: "Las palabras más cortas",
+		difficulty_random: "Palabras azar",
 		list: "Lista Completa",
 		font_size: "Tamaño del texto",
 		normal: "Normal",
@@ -69,7 +93,13 @@ var langs = {
 		about_text: "<p>Wir lernen bereits als Kind jene dreizehn Aussagen, in denen unsere grundlegenden Glaubensansichten zusammengefasst sind.</p><p>Der Prophet Joseph Smith schrieb sie zwei Jahre vor seinem Tod in einem Brief an John Wentworth nieder, den Herausgeber einer Zeitung, der um Informationen bezüglich der Kirche gebeten hatte.</p><p>Seit damals, als die Glaubensartikel verfasst worden sind, weisen sie auf die grundlegenden Evangeliumsprinzipien hin. Sie helfen uns, bestimmte Lehren besser zu verstehen und bereitwillig danach zu leben. Sie regen dazu an, sich tiefere Gedanken zu machen. Und sie sind ein gutes Hilfsmittel, jemandem, der unsere Lehre nicht so gut kennt, diese zu erläutern.</p>",
 		skip: "überspringen",
 		next: "Weiter",
+		again: "Wieder",
 		quiz: "Quiz",
+		difficulty: "Schwierigkeit",
+		difficulty_all: "Alle Wörter",
+		difficulty_long: "Lange Wörter",
+		difficulty_short: "Kurze Wörter",
+		difficulty_random: "Zufällige Wörter",
 		list: "Vollständige Liste",
 		normal: "Normale",
 		large: "Große",
@@ -78,6 +108,15 @@ var langs = {
 		language_string: "Sprache"
 	},
 };
+var difficulty = langs['english'].difficulty_all;
+/*
+difficulty levels
+'all_words', 
+'long_words', 
+'short_words', 
+'random_words', 
+'even_words'
+*/
 
 var aof = [
 	{ aof: 1,   
@@ -151,26 +190,61 @@ jQuery(document).ready(function($) {
 	
 
 	function update_options(){
+		var	font_size_normal_selected, font_size_large_selected, font_size_small_selected, d_a_selected, d_l_selected, d_s_selected, d_r_selected = '';
+		if (font_size == 'large'){
+			font_size_large_selected = 'selected';
+		}
+		else if (font_size == 'small'){
+			font_size_small_selected = 'selected';
+		}
+		else{
+			font_size_normal_selected = 'selected';
+		}
+
+		if (difficulty == langs['english'].difficulty_long ){
+			d_l_selected = 'selected';
+		}
+		else if (difficulty == langs['english'].difficulty_short ){
+			d_s_selected = 'selected';
+		}
+		else if (difficulty == langs['english'].difficulty_random ){
+			d_r_selected = 'selected';
+		}
+		else{
+			d_a_selected = 'selected';
+		}
+
 		var options_content = '';
 		options_content += '<div class="option">';
-			options_content += '<h3>' + langs[language].language_string + '</h3>';
+			options_content += '<label><h3>' + langs[language].language_string + '</h3>';
 			options_content += '<select class="option_language">';
 				for (var lang in langs) {
 					var selected = '';
 					if (language == lang){
-						selected = ' selected';
+						selected = 'selected';
 					}
 				   options_content += "<option value='" + lang + "' " + selected + ">" + langs[lang].language_native + "</option>";
 				}
-			options_content += '</select>';
+			options_content += '</select></label>';
 		options_content += '</div>';
+
 		options_content += '<div class="option">';
-			options_content += '<h3>' + langs[language].font_size + '</h3>';
+			options_content += '<label><h3>' + langs[language].font_size + '</h3>';
 			options_content += '<select class="option_font_size">';
-				options_content += '<option value="" selected>' + langs[language].normal + '</option>';
-				options_content += '<option value="large">' + langs[language].large + '</option>';
-				options_content += '<option value="small">' + langs[language].small + '</option>';
-			options_content += '</select>';
+				options_content += '<option value="" ' + font_size_normal_selected + '>' + langs[language].normal + '</option>';
+				options_content += '<option value="large" ' + font_size_large_selected + '>' + langs[language].large + '</option>';
+				options_content += '<option value="small" ' + font_size_small_selected + '>' + langs[language].small + '</option>';
+			options_content += '</select></label>';
+		options_content += '</div>';
+
+		options_content += '<div class="option">';
+			options_content += '<label><h3>' + langs[language].difficulty + '</h3>';
+			options_content += '<select class="option_difficulty">';
+				options_content += '<option value="' + langs['english'].difficulty_all + '" ' + d_a_selected + '>' + langs[language].difficulty_all + '</option>';
+				options_content += '<option value="' + langs['english'].difficulty_long + '" ' + d_l_selected + '>' + langs[language].difficulty_long + '</option>';
+				options_content += '<option value="' + langs['english'].difficulty_short + '" ' + d_s_selected + '>' + langs[language].difficulty_short + '</option>';
+				options_content += '<option value="' + langs['english'].difficulty_random + '" ' + d_r_selected + '>' + langs[language].difficulty_random + '</option>';
+			options_content += '</select></label>';
 		options_content += '</div>';
 
 		options_content += '<div class="option">';
@@ -186,7 +260,8 @@ jQuery(document).ready(function($) {
 		for(var i=0; i<aof.length; i++){
 			aofs += "<article class='aof_" + i + "'>";
 			aofs += "<dt>" + langs[language].ordinals[i] + " " + langs[language].title + "</dt>";
-			aofs += "<dd style='display:none;'>" + aof[i][language] + "</dd>";
+			aofs += "<dd style='display:none;'>" + aof[i][language];
+			aofs += "<div class='button button_game' data-id='" + i + "'>" + langs[language].quiz + "</div></dd>";
 			aofs += "</article>";
 		}
 
@@ -204,9 +279,18 @@ jQuery(document).ready(function($) {
 
 	$('.options').on('change', '.option_font_size', function(){
 		//console.log('font size update:', $(this).val() );
+		font_size = $(this).val();
 		$('body').attr('class', '');
-		$('body').addClass(  'font-' + $(this).val() );
+		$('body').addClass(  'font-' + font_size );
 		$('.options').removeClass('active');
+	});
+	$('.options').on('change', '.option_difficulty', function(){
+		//console.log('font size update:', $(this).val() );
+		difficulty = $(this).val();
+		console.log(difficulty);
+		//$('body').attr('class', '');
+		//$('body').addClass(  'font-' + font_size );
+		//$('.options').removeClass('active');
 	});
 	$('.options').on('change', '.option_language', function(){
 		//console.log('language change:', $(this).val() );
@@ -218,42 +302,215 @@ jQuery(document).ready(function($) {
 		list_aofs();
 		$('.options').removeClass('active');
 	});
-	$('.options').on('click touch', '.button_game', function(e){
+	$('body').on('click touch', '.button_game', function(e){
+		//console.log($(this).data('id') );
+		if( $(this).data('id') != undefined ){
+			quiz_article = $(this).data('id') - 1;
+		}
+		else {
+			quiz_article = -1;
+		}
+		//console.log(quiz_article);
+		// difficulty = 'long_words';
 		game_aofs();
-		quiz_article = -1;
 		$('.options').removeClass('active');
 	});
 	$('.content').on('click touch', '.button_skip', function(e){
 		game_aofs();
 	});
-	$('.options_toggle').on('click', function(){
+	$('.content').on('click touch', '.button_again', function(e){
+		quiz_article--;
+		$(this).remove();
+		game_aofs();
+	});
+	$('.options_toggle').on('click touch', function(){
 		$('.options').toggleClass('active');
 	})
 
 	function game_aofs(){
+		//console.log(quiz_article);
 		quiz_article++;
-		if (quiz_article > 12){
+		if (quiz_article > 12 || quiz_article < 0 ){
 			quiz_article = 0;
 		}
-		var random_article = Math.floor( aof.length * Math.random() );
+		//var random_article = Math.floor( aof.length * Math.random() );
 		var random_article_words = randomize_aof( quiz_article );
 		var content = '<h1>' + langs[language].quiz + '</h1>';
 		content += '<dt>' + langs[language].ordinals[quiz_article] + " " + langs[language].title + '</dt><dd class="ordered"></dd><dd class="unordered">';
-		for (var i = 0; i < random_article_words.length; i++){
-			content += '<span class="word" data-order="' + random_article_words[i].order + '">' + random_article_words[i].word + '</span>';
+
+		//place unordred words
+		if (difficulty == langs['english'].difficulty_long ){
+			for (var i = 0; i < random_article_words.length; i++){
+				if (random_article_words[i].length > long_word_length) {
+					content += '<span class="word" data-absolute_order="' + random_article_words[i].absolute_order + '" data-order="' + random_article_words[i].order + '">' + random_article_words[i].word + '</span>';
+				}
+			}
 		}
+		else if (difficulty == langs['english'].difficulty_short ){
+			for (var i = 0; i < random_article_words.length; i++){
+				if (random_article_words[i].length < short_word_length) {
+					content += '<span class="word" data-absolute_order="' + random_article_words[i].absolute_order + '" data-order="' + random_article_words[i].order + '">' + random_article_words[i].word + '</span>';
+				}
+			}
+		}
+		else if (difficulty == langs['english'].difficulty_random ){
+			for (var i = 0; i < random_article_words.length; i++){
+				if (i < random_article_words.length/2) {
+					content += '<span class="word" data-absolute_order="' + random_article_words[i].absolute_order + '" data-order="' + random_article_words[i].order + '">' + random_article_words[i].word + '</span>';
+				}
+			}
+		}
+		//default - normal - all words
+		else{
+			for (var i = 0; i < random_article_words.length; i++){
+				content += '<span class="word" data-order="' + random_article_words[i].order + '">' + random_article_words[i].word + '</span>';
+			}
+		}
+
+
 		content += '</dd>';
 		content += '<div class="button button_skip">' + langs[language].skip + '</div>';
 		$('.content').html( content );
 		$('.options').removeClass('active');
-		clicked = 0;
-		console.log(clicked);
+
+		//place ordered words
+		if (difficulty == langs['english'].difficulty_long ){
+			for (var i = 0; i < random_article_words.length; i++){
+				if (random_article_words[i].length > long_word_length) {
+					add_to_ordered_dd(random_article_words[i].absolute_order, random_article_words[i].order);
+				}
+				else {
+					add_to_ordered_dd(random_article_words[i].absolute_order, random_article_words[i].order, random_article_words[i].word);
+				}
+			}
+		}
+		else if (difficulty == langs['english'].difficulty_short ){
+			for (var i = 0; i < random_article_words.length; i++){
+				if (random_article_words[i].length < short_word_length) {
+					add_to_ordered_dd(random_article_words[i].absolute_order, random_article_words[i].order);
+				}
+				else {
+					add_to_ordered_dd(random_article_words[i].absolute_order, random_article_words[i].order, random_article_words[i].word);
+				}
+			}
+		}
+		else if (difficulty == langs['english'].difficulty_random ){
+			for (var i = 0; i < random_article_words.length; i++){
+				if (i < random_article_words.length/2) {
+					add_to_ordered_dd(random_article_words[i].absolute_order, random_article_words[i].order);
+				}
+				else {
+					add_to_ordered_dd(random_article_words[i].absolute_order, random_article_words[i].order, random_article_words[i].word);
+				}
+			}
+		}
+		else {
+			//nothing - all words are unordered
+			clicked = 0;
+		}
+		update_clicked();
+	}
+	function update_clicked(){
+		$('.ordered .current').removeClass('current');
+		//add class to style current blank for UI benefit
+		//find next blank in ordered section
+		if ( $('.ordered .word.blank').length > 0 ) {
+			clicked = $('.ordered .word.blank').first().addClass('current').data('absolute_order');
+			console.log( 'first blank' );
+		}
+		//if no blank and no unordered nothing
+		else if( $('.unordered .word').length <= 0 ) {
+			//nothing
+			console.log( 'no blanks, no guesses - none' );
+		}
+		//if no blank find total
+		else if ( $('.ordered .word').length > 0 ) {
+			clicked = $('.ordered .word').length;
+			//$('.ordered .word:last').addClass('current');
+			console.log( 'no blanks, total used' );
+		}
+		else{
+			clicked = 0;
+		}
+		console.log( clicked );
+
+	}
+	function add_to_ordered_dd(absolute_order, order, word){
+		var blank_class = '';
+		console.log('before', $('.ordered').text() );
+		if ( word == undefined || word == null || word == blank_string ) {
+			word = blank_string;
+			blank_class='blank';
+		}
+		word_html = '<span class="word ' + blank_class + '" data-absolute_order="' + absolute_order + '" data-order="' + order + '">' + word + '</span>';
+		var added = false;
+		var order_ar = order.split(',');
+		order_ar.shift();
+		order_ar.pop();
+		if ($('.ordered .word').length > 0) {
+			//for (var j = 0; j < order_ar.length; j++){
+				//console.log('order array', j, order_ar[j]);
+				//order = parseInt(order_ar[j]);
+				order = absolute_order;
+				$('.ordered .word').each(function(i,e){
+					/* order is an array of each value. use first one and if it already exists check the next one. check each order value */
+
+					//console.log(i, order, $(this).data('order'));
+					if (!added){
+						//this order is already here and is "___", replace it
+						if ( parseInt($(this).data('absolute_order')) == order && $(this).text() == blank_string ) {
+							console.log(word, order, 'replacewith', $(this).data('absolute_order'), $(this).text());
+							$(this).replaceWith(word_html);
+							added = true;
+		console.log('after', $('.ordered').text() );
+							return true;
+						}
+						//this order already here but not a blank spot, check the next index or order
+						else if ( parseInt($(this).data('absolute_order')) == order && $(this).text() != blank_string ){
+							//nothing - order will be incremented and checked again next go around in the for j loop
+							console.log(word, order, 'match found but not blank so continue from here with next order value', $(this).data('absolute_order'), $(this).text());
+							j++;
+							order = parseInt(order_ar[j]);
+							//return true;
+						}
+						//found a higher order data attribte, add this one before that one
+						else if ( parseInt($(this).data('absolute_order')) > order ) {
+							console.log(word, order, 'inserted before', $(this).data('absolute_order'), $(this).text());
+							$(this).before(word_html);
+							added = true;
+		console.log('after', $('.ordered').text() );
+							return true;
+						}
+						else{
+							//nothing, check the next one
+							//console.log(word, order, 'not added here, continue');
+						}
+					}
+				});
+
+			//}
+			//no place to insert, add it to the end - the order is after the last word 
+			if (!added) {
+				console.log(word, order, 'appended to end');
+				$('.ordered').append(word_html);
+		console.log('after', $('.ordered').text() );
+				return true;
+			}
+		}
+		//no words yet, add this first one
+		else {
+			$('.ordered').html(word_html)
+			console.log(word, 'added first one', absolute_order, order);
+		console.log('after', $('.ordered').text() );
+			return true;
+		}
 	}
 
 
-	$('.content').on('click touchstart', '.unordered .word', function(e){
+	$('.content').on('click touch', '.unordered .word', function(e){
+		quiz_guesses_total++;
 		var this_order = $(this).data('order');
-		console.log(this_order);
+		//console.log(this_order);
 		//simple order
 		// if ( this_order == clicked ) {
 		// 	$(this).addClass('clicked');
@@ -261,17 +518,24 @@ jQuery(document).ready(function($) {
 		// }
 		//multiple order
 		if( this_order.indexOf("," + clicked + ",") != -1 ) {
-			$(this).addClass('clicked');
-			clicked++;
+			quiz_guesses_correct++;
+			//$(this).addClass('clicked');
 			//remove clicked word and append to a preceding div
-			$('.ordered').append( $(this) );
+			//$('.ordered').append( $(this) );
+			add_to_ordered_dd( clicked, $(this).data('order'), $(this).text() );
+			$(this).remove();
+			//clicked++;
 		}
-		console.log($('.unordered .word').length);
+			update_clicked();
+		//console.log($('.unordered .word').length);
 		//show next
 		if ( $('.unordered .word').length < 1) {
 			$('.unordered').addClass('empty');
 			$('.button_skip').text( langs[language].next );
+			$('.button_skip').after( "<div class='button button_again'>" + langs[language].again + "</div>" );
+			$('dt').append(" - " + parseInt( (quiz_guesses_correct / quiz_guesses_total) * 100 ) + "%");
 		}
+		//console.log('score :', quiz_guesses_correct / quiz_guesses_total);
 	});
 
 
@@ -282,7 +546,13 @@ jQuery(document).ready(function($) {
 		var article_words = [];
 		//copy words into array with correct order vars
 		for (var i = 0; i < article_word.length; i++){
-			article_words.push({ word: article_word[i], order: i });
+			article_words.push({ 
+				word: article_word[i], 
+				order: i,
+				absolute_order: i,
+				odd: i % 2,
+				length: article_word[i].length
+			});
 		}
 		//console.log(article_words);
 		article_words.sort(
@@ -296,34 +566,41 @@ jQuery(document).ready(function($) {
 		);
 		//console.log(article_words);
 		for (var i = 0; i < article_words.length; i++){
-			console.log(article_words[i].word);
+			//console.log(article_words[i].word);
 			if ( i < article_words.length-1 && article_words[i].word == article_words[i+1].word ){
 				var j,k = i;
 				var ik_order = ',';
+				var ik_order_ar = [];
 				for (j = i; j < article_words.length;j++){
 					if ( article_words[i].word == article_words[j].word ){
 						k=j;
 						ik_order += article_words[j].order + ',';
-						console.log(ik_order);
+						ik_order_ar.push(article_words[j].order);
+						//console.log(ik_order);
 					}
 				}
+				ik_order_ar.sort(function(a,b){return a-b});
 				for (j = i; j <= k; j++){
+					article_words[j].order_ar = ik_order_ar;
+					ik_order = ',' + ik_order_ar.join() + ',';
 					article_words[j].order = ik_order;
 				}	
 				i = k;
 			}
 			else{
 				article_words[i].order = ',' + article_words[i].order + ',';
-				console.log(article_words[i].order);
+				article_words[i].order_ar = new Array();
+				article_words[i].order_ar[0] = article_words[i].order;
+				//console.log(article_words[i].order);
 			}
 		}
+		//random sort
 		article_words.sort(
 			function() {
 				return 0.5 - Math.random();
 			}
 		);
 		return article_words;
-
 	}
 
 

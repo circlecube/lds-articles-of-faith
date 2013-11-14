@@ -405,6 +405,10 @@ textarea {
     display:block;
     border-bottom: 8px solid #339944;
     font-family: 'Arial', sans-serif;
+    overflow:hidden;
+}
+.content dd .button {
+    float:right;
 }
 
 body
@@ -429,6 +433,7 @@ body.font-small {
     display: block;
     width:auto;
     margin: 1em;
+    float:left;
     cursor: pointer;
     clear:both;
 }
@@ -444,6 +449,12 @@ body.font-small {
     border: 1px solid #339944;
     border-radius: 1em;
     margin: .5em;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .content .ordered {
     background: #339944;
@@ -457,13 +468,17 @@ body.font-small {
     border-radius:0;
     padding: .5em .25em;
 }
+.ordered .word.current {
+    background: rgba(255,255,255,.5);
+}
 .unordered .word {
     cursor: pointer;
 }
 .unordered.empty {
     padding:0;
 }
-.word:active{
+.word:active,
+.word:focus{
     background:#339944;
     color:#fff;
 }
