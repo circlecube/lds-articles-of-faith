@@ -148,11 +148,13 @@ jQuery(document).ready(function($) {
 		console.log('font size update:', $(this).val() );
 		$('body').attr('class', '');
 		$('body').addClass(  'font-' + $(this).val() );
+		$('.options').toggleClass('active');
 	});
 	$('.option_language').on('change', function(){
 		console.log('language change:', $(this).val() );
 		language = $(this).val();
 		list_aofs();
+		$('.options').toggleClass('active');
 	});
 	$('.options_toggle').on('click', function(){
 		$('.options').toggleClass('active');

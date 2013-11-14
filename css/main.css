@@ -39,6 +39,10 @@ html {
     text-shadow: none;
 }
 
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
 /*
  * A better looking default horizontal rule
  */
@@ -356,7 +360,7 @@ textarea {
 }
 
 .content h1 {
-    padding:1em;
+    padding:1em .5em;
 }
 .content dt {
     display:block;
