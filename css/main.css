@@ -1,3 +1,9 @@
+@font-face{
+    font-family:"Trajan";
+    src:url("Fonts/b1ea5371-054f-484d-aa42-a79997cd4e21.eot?#iefix");
+    src:url("Fonts/b1ea5371-054f-484d-aa42-a79997cd4e21.eot?#iefix") format("eot"),url("Fonts/2649890f-ced1-4b53-9a01-4ce5a76159a6.woff") format("woff"),url("Fonts/b66b7a48-c18d-4214-8f34-27f14538f51f.ttf") format("truetype"),url("Fonts/083f0ff8-1ce1-4e64-bb92-478df522f370.svg#083f0ff8-1ce1-4e64-bb92-478df522f370") format("svg");
+}
+
 /*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
 
 /*
@@ -341,7 +347,7 @@ textarea {
     font-size:2em;
     border-top: 0.375em double #fff;
     border-bottom: 0.125em solid #fff;
-    margin: .25em .2em;
+    margin: .25em .25em;
 }
 .options_toggle:hover {
     background: #37434b;
@@ -351,23 +357,39 @@ textarea {
     position:absolute;
     top:-100%;
     width:100%;
-    background: #cc9933;
+    background: #339944;
     padding: 2em;
     z-index:1;
+    color:#fff;
+    font-family:'Trajan','Georgia',serif;
+}
+.options .option{
+    clear:both; 
+    overflow:hidden;
+}
+.options h3{
+    float:left;
+    margin: 1em;
+}
+.options select {
+    float:left;
+    margin: 1em;
 }
 .options.active {
     top:0;
 }
 
 .content h1 {
-    padding:1em .5em;
+    font-family:'Trajan','Georgia',serif;
+    padding:.5em;
 }
 .content dt {
     display:block;
     cursor: pointer;
     padding: 1em;
     background: #eee;
-    border-bottom: 1px solid #cc9933;
+    border-bottom: 1px solid #339944;
+    font-family:'Trajan','Georgia',serif;
 }
 .content dt:hover,
 .content dt.active,
@@ -379,7 +401,8 @@ textarea {
     background: #fff;
     padding: 1em 1em 2em;
     display:block;
-    border-bottom: 8px solid #cc9933;
+    border-bottom: 8px solid #339944;
+    font-family: 'Arial', sans-serif;
 }
 
 body

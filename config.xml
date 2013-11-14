@@ -2,8 +2,8 @@
     <widget xmlns = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.circlecube.articlesoffaith"
-        versionCode="110" 
-        version   = "0.1.1">
+        versionCode="120" 
+        version   = "0.1.2">
 
     <name>LDS Articles of Faith</name>
 
