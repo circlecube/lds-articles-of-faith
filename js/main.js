@@ -200,15 +200,23 @@ var aof = [
 
 jQuery(document).ready(function($) {
 
-	document.addEventListener("deviceready", onDeviceReady, false);
-	document.addEventListener("menubutton", onMenuKeyDown, false);
-	document.addEventListener("backbutton", onBackKeyDown, false);
+	function init(){
+		document.addEventListener("deviceready", onDeviceReady, false);
+		document.addEventListener("menubutton", onMenuKeyDown, false);
+		document.addEventListener("backbutton", onBackKeyDown, false);
+
+		update_language();
+		//$('.options').toggleClass('active');
+		game_aofs();
+	}
 
 	function onDeviceReady() {
 		//https://github.com/phonegap-build/GAPlugin/blob/c928e353feb1eb75ca3979b129b10b216a27ad59/README.md
 		//gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Button", "Click", "event only", 1);
 	    gaPlugin = window.plugins.gaPlugin;
-	    gaPlugin.init(successHandler, errorHandler, "UA-1466312-11", 10);
+	    gaPlugin.init(nativePluginResultHandler, nativePluginErrorHandler, "UA-1466312-11", 10);
+		gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "App", "Begin", quiz_article);
+
 	}
 	
 
@@ -441,6 +449,10 @@ jQuery(document).ready(function($) {
 			//nothing - all words are unordered
 			clicked = 0;
 		}
+		//reset scores
+		quiz_guesses_total = 0;
+		quiz_guesses_correct = 0;
+
 		update_clicked();
 	}
 	function update_clicked(){
@@ -569,7 +581,8 @@ jQuery(document).ready(function($) {
 				$(this).remove();
 				//clicked++;
 			}
-				update_clicked();
+			console.log(quiz_guesses_correct, '/', quiz_guesses_total);
+			update_clicked();
 			//console.log($('.unordered .word').length);
 			//show next
 			if ( $('.unordered .word').length < 1) {
@@ -594,14 +607,7 @@ To track an event, call (oddly enough) trackEvent(). trackEvent takes 6 argument
 		}
 	});
 
-function nativePluginResultHandler(){
-	//success
-	//console.log('nativePluginResultHandler', 'success');
-}
-function nativePluginErrorHandler() {
-	//error
-	//console.log('nativePluginErrorHandler', 'fail');
-}
+
 	function randomize_aof(article){
 		//console.log('randomize_aof()');
 		//split article into array of words in correct order
@@ -666,12 +672,19 @@ function nativePluginErrorHandler() {
 		return article_words;
 	}
 
-
-	function init(){
-		update_language();
-		//$('.options').toggleClass('active');
-		game_aofs();
+	function nativePluginResultHandler(){
+		//success
+		//console.log('nativePluginResultHandler', 'success');
 	}
+	function nativePluginErrorHandler() {
+		//error
+		//console.log('nativePluginErrorHandler', 'fail');
+	}
+	function goingAway() {
+		gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "App", "End", quiz_article);
+	    gaPlugin.exit(nativePluginResultHandler, nativePluginErrorHandler);
+	}
+
 
 	init();
 });

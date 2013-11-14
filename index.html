@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="js/vendor/mmenu-4.0.3/source/jquery.mmenu.css">
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
-    <body ontouchstart="">
+    <body ontouchstart="" onunload="goingAway();">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -27,16 +27,7 @@
         <h1 class="title">Articles of Faith</h1>
     </div>
             <!-- Add your site or application content here -->
-    <div class="options_toggle">Options</div>
     <div class="options">
-        
-    </div>
-
-
-    <div class="content">
-        
-    </div>
-
 <div id="mmenu" class="menu">
     <ul>
         <li><a href="#" class="quiz_begin">Quiz</a></li>
@@ -67,12 +58,22 @@
             </ul>
         </li>
     </ul>
+</div>        
+    </div>
+
+
+    <div class="content">
+        
+    </div>
+
+
 </div>
-</div>
-        <script src="js/vendor/jquery-1.10.2.min.js"></script>
-        <script src="js/plugins.js"></script>
-        <script src="js/vendor/mmenu-4.0.3/source/jquery.mmenu.min.js"></script>
-        <script src="js/main.js"></script>
+        <script type="text/javascript" src="phonegap.js"></script>
+        <script type="text/javascript" src="GAPlugin.js"></script>
+        <script type="text/javascript" src="js/vendor/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="js/plugins.js"></script>
+        <script type="text/javascript" src="js/vendor/mmenu-4.0.3/source/jquery.mmenu.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.
         <script>
