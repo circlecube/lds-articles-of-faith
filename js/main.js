@@ -244,6 +244,11 @@ jQuery(document).ready(function($) {
 		$('.difficulty-long_words').text( 	langs[language].difficulty_long );
 		$('.difficulty-short_words').text( 	langs[language].difficulty_short );
 		$('.difficulty-first_letter').text( langs[language].difficulty_first_letter );
+		// $('.difficulty-all_words').data( 'value', 	langs['english'].difficulty_all );
+		// $('.difficulty-random_words').data( 'value', 	langs['english'].difficulty_random );
+		// $('.difficulty-long_words').data( 'value', 	langs['english'].difficulty_long );
+		// $('.difficulty-short_words').data( 'value', 	langs['english'].difficulty_short );
+		// $('.difficulty-first_letter').data( 'value', 	langs['english'].difficulty_first_letter );
 
 		$('.language').text( 			langs[language].language_string );
 		$('.language-english').text( 	langs['english'].language_native );
@@ -256,7 +261,7 @@ jQuery(document).ready(function($) {
 		$('.font_size-normal').text( 	langs[language].normal );
 		$('.font_size-small').text( 	langs[language].small );
 
-		$('.title').text(	langs[language].title );
+		$('.title').text(	langs[language].title_plural );
 	}	
 
 	function list_aofs(){
@@ -291,10 +296,12 @@ jQuery(document).ready(function($) {
 		$('body').addClass(  'font-' + font_size );
 	});
 	$('.difficulty_option').on('click touch', function(e){
-		//console.log('difficulty update:', $(this).val() );
+		//console.log('difficulty update:', $(this).data('value'));
 		difficulty = $(this).data('value');
 		$(this).parent().siblings().removeClass('active');
 		$(this).parent().addClass('active');
+		quiz_article--;
+		game_aofs();
 		//console.log(difficulty);
 	});
 	$('.language_option').on('click touch', function(e){
@@ -304,6 +311,8 @@ jQuery(document).ready(function($) {
 		$(this).parent().addClass('active');
 		$('.content').html('');
 		update_language();
+		quiz_article--;
+		game_aofs();
 	});
 	$('.list_all').on('click touch', function(e){
 		list_aofs();
