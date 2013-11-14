@@ -14,26 +14,64 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="js/vendor/mmenu-4.0.3/source/jquery.mmenu.css">
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body ontouchstart="">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
+<div class="page">
+    <div class="header">
+        <a class="menu-toggle" href="#mmenu">Menu</a>
+        <h1 class="title">Articles of Faith</h1>
+    </div>
+            <!-- Add your site or application content here -->
+    <div class="options_toggle">Options</div>
+    <div class="options">
+        
+    </div>
 
-        <!-- Add your site or application content here -->
-<div class="options_toggle">Options</div>
-<div class="options">
-    
+
+    <div class="content">
+        
+    </div>
+
+<div id="mmenu" class="menu">
+    <ul>
+        <li><a href="#" class="quiz_begin">Quiz</a></li>
+        <li><a href="#" class="list_all">List All</a></li>
+        <li><a href="#" class="about">About</a></li>
+        <li><a href="#" class="difficulty">Difficulty</a>
+            <ul>
+                <li class="active"><a href="#" class="difficulty-all_words" data-value="all_words">All Words</a></li>
+                <li><a href="#" class="difficulty_option difficulty-random_words" data-value="random_words">Random Words</a></li>
+                <li><a href="#" class="difficulty_option difficulty-long_words" data-value="long_words">Long Words</a></li>
+                <li><a href="#" class="difficulty_option difficulty-short_words" data-value="short_words">Short Words</a></li>
+                <li><a href="#" class="difficulty_option difficulty-first_letter" data-value="first_letter">First Letter</a></li>
+            </ul>
+        </li>
+        <li><a href="#" class="language">Language</a>
+            <ul>
+                <li class="active"><a href="#" class="language_option language-english" data-value="english">English</a></li>
+                <li><a href="#" class="language_option language-spanish" data-value="spanish">Spanish</a></li>
+                <li><a href="#" class="language_option language-french" data-value="french">French</a></li>
+                <li><a href="#" class="language_option language-german" data-value="german">German</a></li>
+            </ul>
+        </li>
+        <li><a href="#" class="font_size">Text Size</a>
+            <ul>
+                <li><a href="#" class="font_size_option font_size-large" data-value="large">Large</a></li>
+                <li class="active"><a href="#" class="font_size_option font_size-normal" data-value="normal">Normal</a></li>
+                <li><a href="#" class="font_size_option font_size-small" data-value="small">Small</a></li>
+            </ul>
+        </li>
+    </ul>
 </div>
-
-
-<div class="content">
-    
 </div>
-
         <script src="js/vendor/jquery-1.10.2.min.js"></script>
         <script src="js/plugins.js"></script>
+        <script src="js/vendor/mmenu-4.0.3/source/jquery.mmenu.min.js"></script>
         <script src="js/main.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.
