@@ -2,7 +2,10 @@
 
 */
 var gaPlugin;
+var activity_log = [];
 var touching = false;
+var keep_log = true;
+var show_hints = true;
 var language = 'english';
 var font_size = 'normal';
 var long_word_length = 3;
@@ -11,6 +14,8 @@ var clicked;
 var quiz_article = -1;
 var quiz_guesses_total = 0;
 var quiz_guesses_correct = 0;
+var quiz_guesses_incorrect_streak = 0;
+var quiz_guesses_incorrect_streak_for_hint = 2;
 var blank_string = '___';
 var langs = {
 	english: { 
@@ -26,6 +31,11 @@ var langs = {
 		again: "Again",
 		quiz: "Quiz",
 		about: "About",
+		log: "Activity",
+		clear_log: "Clear Activity Log",
+		hints: "Hints",
+		hints_show: "Show Hints",
+		hints_hide: "Do Not Show Hints",
 		difficulty: "Difficulty",
 		difficulty_all: "All Words",
 		difficulty_long: "Long Words",
@@ -52,6 +62,11 @@ var langs = {
 		again: "Refaire",
 		quiz: "Quiz",
 		about: "Infos",
+		log: "Activité",
+		clear_log: "Effacer Activité Log",
+		hints: "Allusions",
+		hints_show: "Montrent Conseils",
+		hints_hide: "Ne Montrent Pas de Conseils",
 		difficulty: "Difficulté",
 		difficulty_all: "Tous les mots",
 		difficulty_long: "Les mots longs",
@@ -78,6 +93,11 @@ var langs = {
 		again: "Rehacer",
 		quiz: "Examen",
 		about: "Info",
+		log: "Actividad",
+		clear_log: "Borrar Actividad Log",
+		hints: "Consejo",
+		hints_show: "Mostrar Consejo",
+		hints_hide: "No Mostrar Consejo",
 		difficulty: "Dificultad",
 		difficulty_all: "Todas las Palabras",
 		difficulty_long: "Palabras largas",
@@ -104,6 +124,11 @@ var langs = {
 		again: "Wieder",
 		quiz: "Quiz",
 		about: "Info",
+		log: "Aktivität",
+		clear_log: "Löschen Aktivität Log",
+		hints: "Hinweise",
+		hints_show: "Anzeige Hinweise",
+		hints_hide: "Keine Hinweise Angezeigt",
 		difficulty: "Schwierigkeit",
 		difficulty_all: "Alle Wörter",
 		difficulty_long: "Lange Wörter",
@@ -205,8 +230,30 @@ jQuery(document).ready(function($) {
 		document.addEventListener("menubutton", onMenuKeyDown, false);
 		document.addEventListener("backbutton", onBackKeyDown, false);
 
+		//get local storage settings
+		if (localStorage.font_size){
+			font_size = localStorage.font_size;
+		}
+		if (localStorage.difficulty){
+			difficulty = localStorage.difficulty;
+		}
+		if (localStorage.language){
+			language = localStorage.language;
+		}
+		if (localStorage.show_hints){
+			show_hints = localStorage.show_hints;
+		}
+		if (localStorage.activity_log){
+			activity_log = JSON.parse(localStorage.activity_log);
+		}
+
+		//reset log
+		//activity_log = [];
+
+		$('body').attr('class', '');
+		$('body').addClass(  'font-' + font_size );
+
 		update_language();
-		//$('.options').toggleClass('active');
 		game_aofs();
 	}
 
@@ -269,7 +316,20 @@ jQuery(document).ready(function($) {
 		$('.font_size-normal').text( 	langs[language].normal );
 		$('.font_size-small').text( 	langs[language].small );
 
+		$('.hints_option').text( 		langs[language].hints );
+		$('.hints_option-show').text( 	langs[language].hints_show );
+		$('.hints_option-hide').text( 	langs[language].hints_hide );
+
+
 		$('.title').text(	langs[language].title_plural );
+
+		//set active from local storage vars
+		console.log(font_size, difficulty, language);
+		$('.difficulty_option, .language_option, .font_size_option, .hints_option').parent().removeClass('active');
+		$('.font_size_option[data-value="' + font_size + '"]').parent().addClass('active');
+		$('.language_option[data-value="' + language + '"]').parent().addClass('active');
+		$('.difficulty_option[data-value="' + difficulty + '"]').parent().addClass('active');
+		$('.hints_option[data-value="' + show_hints + '"]').parent().addClass('active');
 	}	
 
 	function list_aofs(){
@@ -298,6 +358,7 @@ jQuery(document).ready(function($) {
 	$('.font_size_option').on('click touch', function(e){
 		//console.log('font size update:', $(this).data('value') );
 		font_size = $(this).data('value');
+		localStorage.font_size = font_size;
 		$(this).parent().siblings().removeClass('active');
 		$(this).parent().addClass('active');
 		$('body').attr('class', '');
@@ -306,6 +367,7 @@ jQuery(document).ready(function($) {
 	$('.difficulty_option').on('click touch', function(e){
 		//console.log('difficulty update:', $(this).data('value'));
 		difficulty = $(this).data('value');
+		localStorage.difficulty = difficulty;
 		$(this).parent().siblings().removeClass('active');
 		$(this).parent().addClass('active');
 		quiz_article--;
@@ -315,6 +377,7 @@ jQuery(document).ready(function($) {
 	$('.language_option').on('click touch', function(e){
 		//console.log('language change:', $(this).val() );
 		language = $(this).data('value');
+		localStorage.language = language;
 		$(this).parent().siblings().removeClass('active');
 		$(this).parent().addClass('active');
 		$('.content').html('');
@@ -324,7 +387,6 @@ jQuery(document).ready(function($) {
 	});
 	$('.list_all').on('click touch', function(e){
 		list_aofs();
-		//$('#mmenu').trigger( "close.mm" );
 	});
 	$('body').on('touchstart', function(){
 		//touching = true;
@@ -335,11 +397,31 @@ jQuery(document).ready(function($) {
 	$('.quiz_begin').on('click touch', function(e){
 		quiz_article = -1;
 		game_aofs();
-	    //$('#mmenu').trigger( "close.mm" );
+	});
+	$('.quiz_begin_jump').on('click touch', function(e){
+		quiz_article = $(this).data('value') - 2;
+		game_aofs();
 	});
 	$('.about').on('click touch', function(e){
 		show_about();
-	    //$('#mmenu').trigger( "close.mm" );
+	});
+	$('.option_keep_log').on('click touch', function(e){
+		keep_log = !$(this).parent().hasClass('active');
+		if ( keep_log ) {
+			$(this).parent().addClass('active');
+		}
+		else{
+			$(this).parent().removeClass('active');
+		}
+	});
+	$('.hints_option').on('click touch', function(e){
+		show_hints = $(this).data('value');
+		localStorage.show_hints = show_hints;
+		$(this).parent().siblings().removeClass('active');
+		$(this).parent().addClass('active');
+	});
+	$('.activity_log').on('click touch', function(e){
+		show_activity_log();
 	});
 	$('.content').on('click touch', '.button_skip', function(e){
 		game_aofs();
@@ -352,10 +434,29 @@ jQuery(document).ready(function($) {
 	$('.options_toggle').on('click touch', function(){
 		$('.options').toggleClass('active');
 	})
+	$('.content').on('click touch', '.button_clear_log', function(e){
+		activity_log = [];
+		localStorage.activity_log = JSON.stringify(activity_log);
+		show_activity_log();
+	})
 	function show_about(){
 		var content = '<dt>' + langs[language].about + ': ' + langs[language].title_plural + '</dt>';
 		content += '<dd>' + langs[language].about_text + '</dd>';
 
+		$('.content').html( content );
+	}
+	function show_activity_log(){
+		var content = '<dt>' + langs[language].log + '</dt>';
+		for( var i=0; i<activity_log.length;i++){
+			console.log(activity_log[i]);
+			if ( activity_log[i].s != undefined ) {
+				content += '<dd>' + activity_log[i].s + '% - ';
+				content += langs[language].ordinals[activity_log[i].i] + ' ' + langs[language].title + ' ';
+				// content += ' (' + activity_log[i].d + ') ';
+				content += relative_time(activity_log[i].t) + '.</dd>';
+			}
+		}
+		content += '<div class="button button_clear_log">' + langs[language].clear_log + '</div>';
 		$('.content').html( content );
 	}
 	function game_aofs(){
@@ -452,7 +553,7 @@ jQuery(document).ready(function($) {
 		//reset scores
 		quiz_guesses_total = 0;
 		quiz_guesses_correct = 0;
-
+		quiz_guesses_incorrect_streak = 0;
 		update_clicked();
 	}
 	function update_clicked(){
@@ -477,8 +578,24 @@ jQuery(document).ready(function($) {
 		else{
 			clicked = 0;
 		}
-		//console.log( clicked );
 
+		console.log( clicked );
+	}
+	function show_hint(){
+		if ( show_hints ) {
+			$('.word').removeClass('hint');
+			$('.unordered .word[data-absolute_order="'+clicked+'"]').addClass('hint');
+			if ( $('.hint').length < 1 ){
+				//find all right answers
+				console.log('none hinted');
+				$('.unordered .word').each(function(i,e){
+					var this_order = $(this).data('order');
+					if( this_order.indexOf("," + clicked + ",") != -1 ) {
+						$(this).addClass('hint');
+					}
+				});
+			}
+		}
 	}
 	function add_to_ordered_dd(absolute_order, order, word, letter_only){
 		var blank_class = '';
@@ -559,9 +676,9 @@ jQuery(document).ready(function($) {
 
 
 	$('.content').on('click touchstart', '.unordered .word', function(e){
-		if (!touching) {
+		//if (!touching) {
 		//uncomment for desktop testing
-		//if (true){
+		if (true){
 			touching = true;
 			quiz_guesses_total++;
 			var this_order = $(this).data('order');
@@ -574,6 +691,7 @@ jQuery(document).ready(function($) {
 			//multiple order
 			if( this_order.indexOf("," + clicked + ",") != -1 ) {
 				quiz_guesses_correct++;
+				quiz_guesses_incorrect_streak = 0;
 				//$(this).addClass('clicked');
 				//remove clicked word and append to a preceding div
 				//$('.ordered').append( $(this) );
@@ -581,7 +699,14 @@ jQuery(document).ready(function($) {
 				$(this).remove();
 				//clicked++;
 			}
-			console.log(quiz_guesses_correct, '/', quiz_guesses_total);
+			else {
+				quiz_guesses_incorrect_streak++;
+
+				if (quiz_guesses_incorrect_streak >= quiz_guesses_incorrect_streak_for_hint) {
+					show_hint();
+				}
+			}
+			//console.log(quiz_guesses_correct, '/', quiz_guesses_total);
 			update_clicked();
 			//console.log($('.unordered .word').length);
 			//show next
@@ -591,6 +716,21 @@ jQuery(document).ready(function($) {
 				$('.button_skip').after( "<div class='button button_again'>" + langs[language].again + "</div>" );
 				var score = parseInt( (quiz_guesses_correct / quiz_guesses_total) * 100 );
 				$('dt').append(" - " + score + "%");
+
+				if ( keep_log ) {
+					var now = new Date();
+					var timestamp = now.getTime();
+					//save completed article, difficulty level and score and timestamp to local storage to be displayed on the activity log page.
+					activity_log.unshift({
+						s: score,
+						d: difficulty,
+						t: timestamp,
+						i: quiz_article
+					});
+					// = quiz_article + ',' + difficulty + ',' + score + ',' + timestamp + '|' + activity_log;
+					localStorage.activity_log = JSON.stringify(activity_log);
+					//console.log (activity_log, JSON.stringify(activity_log) );
+				}
 /*
 To track an event, call (oddly enough) trackEvent(). trackEvent takes 6 arguments;
 
@@ -684,6 +824,31 @@ To track an event, call (oddly enough) trackEvent(). trackEvent takes 6 argument
 		gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "App", "End", quiz_article);
 	    gaPlugin.exit(nativePluginResultHandler, nativePluginErrorHandler);
 	}
+
+
+	function relative_time(time) {
+      var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
+      var delta = parseInt((relative_to.getTime() - time) / 1000);
+      var r = '';
+      if (delta < 20) {
+        r = 'just now';
+      } else if (delta < 60) {
+        r = delta + ' seconds ago';
+      } else if(delta < 120) {
+        r = 'a minute ago';
+      } else if(delta < (45*60)) {
+        r = (parseInt(delta / 60, 10)).toString() + ' minutes ago';
+      } else if(delta < (2*60*60)) {
+        r = 'an hour ago';
+      } else if(delta < (24*60*60)) {
+        r = (parseInt(delta / 3600, 10)).toString() + ' hours ago';
+      } else if(delta < (48*60*60)) {
+        r = 'a day ago';
+      } else {
+        r = (parseInt(delta / (24*60*60))).toString() + ' days ago';
+      }
+      return r;
+    }
 
 
 	init();

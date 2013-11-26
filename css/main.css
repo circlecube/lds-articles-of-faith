@@ -376,6 +376,10 @@ body,
 #mmenu .mm-list a.mm-subopen {
     width: 100%;
 }
+#mmenu .mm-list .quiz a.mm-subopen {
+    width: 3em;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
 .mm-list > li.active,
 .mm-menu .mm-list > li.active > a:not(.mm-subopen),
 .mm-menu .mm-list > li.active > span {
@@ -534,6 +538,7 @@ body.font-small {
     background: #339944;
     padding:.5em;
     overflow:hidden;
+    line-height:.66em;
 }
 .ordered .word {
     background: #339944;
@@ -552,7 +557,8 @@ body.font-small {
     padding:0;
 }
 .word:active,
-.word:focus{
+.word:focus,
+.word.hint {
     background:#339944;
     color:#fff;
 }
