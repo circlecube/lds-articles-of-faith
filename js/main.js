@@ -676,9 +676,9 @@ jQuery(document).ready(function($) {
 
 
 	$('.content').on('click touchstart', '.unordered .word', function(e){
-		//if (!touching) {
+		if (!touching) {
 		//uncomment for desktop testing
-		if (true){
+		//if (true){
 			touching = true;
 			quiz_guesses_total++;
 			var this_order = $(this).data('order');
