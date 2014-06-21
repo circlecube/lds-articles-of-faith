@@ -17,6 +17,13 @@ var quiz_guesses_correct = 0;
 var quiz_guesses_incorrect_streak = 0;
 var quiz_guesses_incorrect_streak_for_hint = 2;
 var blank_string = '___';
+var has_class_no_touch = false;
+
+var share_message = 'Do you know the Articles of Faith? Take the test in this mobile app!';
+var share_subject = '13 Articles of Faith';
+var share_files = null;
+var share_url = 'https://play.google.com/store/apps/details?id=com.circlecube.articlesoffaith';
+
 var langs = {
 	english: { 
 		language_native: "English", 
@@ -28,6 +35,7 @@ var langs = {
 		about_text: "<p>One of the first things we’re taught as children are the Articles of Faith — 13 statements that summarize our fundamental beliefs.</p><p>The Prophet Joseph Smith wrote them in a letter to a newspaper editor, John Wentworth, who had asked for information about the Church.</p><p>Ever since the Articles of Faith were written, they’ve inspired and directed us in the basic principles of our gospel. They enhance our understanding of certain doctrines and help us commit to living them. They invite further thought. And they’re a good tool for explaining our beliefs to people unfamiliar with them.</p>",
 		skip: "Skip",
 		next: "Continue",
+		share: "Share",
 		again: "Again",
 		quiz: "Quiz",
 		about: "About",
@@ -247,6 +255,7 @@ jQuery(document).ready(function($) {
 			activity_log = JSON.parse(localStorage.activity_log);
 		}
 
+		has_class_no_touch = $('html').hasClass('no-touch');
 		//reset log
 		//activity_log = [];
 
@@ -389,7 +398,7 @@ jQuery(document).ready(function($) {
 		list_aofs();
 	});
 	$('body').on('touchstart', function(){
-		//touching = true;
+		touching = true;
 	});
 	$('body').on('touchend', function(){
 		touching = false;
@@ -430,6 +439,32 @@ jQuery(document).ready(function($) {
 		quiz_article--;
 		$(this).remove();
 		game_aofs();
+	});
+	$('.share').on('click touch', function(e){
+		share_message = 'Do you know the Articles of Faith?';
+		share_message += ' Take the test in this mobile app!';
+		share_message += '#lds #articlesoffaith';
+		share_subject = langs[language].title_plural;
+		console.log(share_message, share_subject, share_url);
+		window.plugins.socialsharing.available(function(isAvailable) {
+		    if (isAvailable) {
+				window.plugins.socialsharing.share(share_message, share_subject, share_files, share_url );
+		    }
+		});
+
+	});
+	$('.content').on('click touch', '.button_share', function(e){
+		share_message = 'Do you know the Articles of Faith?';
+		share_message += ' I do! I got ' + $('.button_share').data('score') + '% correct on ' + $('.button_share').data('article') + '!';
+		share_message += '#lds #articlesoffaith';
+		share_subject = langs[language].title_plural;
+		console.log(share_message, share_subject, share_url);
+	  	window.plugins.socialsharing.available(function(isAvailable) {
+		    if (isAvailable) {
+				window.plugins.socialsharing.share(share_message, share_subject, share_files, share_url );
+		    }
+		});
+
 	});
 	$('.options_toggle').on('click touch', function(){
 		$('.options').toggleClass('active');
@@ -676,9 +711,7 @@ jQuery(document).ready(function($) {
 
 
 	$('.content').on('click touchstart', '.unordered .word', function(e){
-		if (!touching) {
-		//uncomment for desktop testing
-		//if (true){
+		if (!touching || has_class_no_touch) {
 			touching = true;
 			quiz_guesses_total++;
 			var this_order = $(this).data('order');
@@ -711,10 +744,11 @@ jQuery(document).ready(function($) {
 			//console.log($('.unordered .word').length);
 			//show next
 			if ( $('.unordered .word').length < 1) {
+				var score = parseInt( (quiz_guesses_correct / quiz_guesses_total) * 100 );
 				$('.unordered').addClass('empty');
 				$('.button_skip').text( langs[language].next );
 				$('.button_skip').after( "<div class='button button_again'>" + langs[language].again + "</div>" );
-				var score = parseInt( (quiz_guesses_correct / quiz_guesses_total) * 100 );
+				$('.button_skip').after( "<div class='button button_share' data-score='" + score + "' data-article='" + langs[language].ordinals[quiz_article] + " " + langs[language].title + "'>" + langs[language].share + "</div>" );
 				$('dt').append(" - " + score + "%");
 
 				if ( keep_log ) {
