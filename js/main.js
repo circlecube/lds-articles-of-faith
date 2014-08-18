@@ -19,7 +19,7 @@ var quiz_guesses_incorrect_streak_for_hint = 2;
 var blank_string = '___';
 var has_class_no_touch = false;
 
-var share_message = 'Do you know the Articles of Faith? Take the test in this mobile app!';
+var share_message = 'Do you know the Articles of Faith? Take the test in this mobile app! ';
 var share_subject = '13 Articles of Faith';
 var share_files = null;
 var share_url = 'https://play.google.com/store/apps/details?id=com.circlecube.articlesoffaith';
@@ -451,11 +451,11 @@ jQuery(document).ready(function($) {
 				window.plugins.socialsharing.share(share_message, share_subject, share_files, share_url );
 		    }
 		});
-
+		gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Share", "Menu", quiz_article, score);
 	});
 	$('.content').on('click touch', '.button_share', function(e){
 		share_message = 'Do you know the Articles of Faith?';
-		share_message += ' I do! I got ' + $('.button_share').data('score') + '% correct on ' + $('.button_share').data('article') + '!';
+		share_message += ' I do! I got ' + $('.button_share').data('score') + '% correct on the ' + $('.button_share').data('article') + '!';
 		share_message += '#lds #articlesoffaith';
 		share_subject = langs[language].title_plural;
 		console.log(share_message, share_subject, share_url);
@@ -464,7 +464,7 @@ jQuery(document).ready(function($) {
 				window.plugins.socialsharing.share(share_message, share_subject, share_files, share_url );
 		    }
 		});
-
+	  	gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Share", "Level", quiz_article, score);
 	});
 	$('.options_toggle').on('click touch', function(){
 		$('.options').toggleClass('active');
