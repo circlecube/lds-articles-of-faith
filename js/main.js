@@ -24,6 +24,19 @@ var share_subject = '13 Articles of Faith';
 var share_files = null;
 var share_url = 'https://play.google.com/store/apps/details?id=com.circlecube.articlesoffaith';
 
+var devicePlatform = 'Android';
+// var devicePlatform = 'iOS';
+if (typeof( device ) !== 'undefined') {
+	devicePlatform = device.platform;
+}
+// var devicePlatform = device.platform;
+var android_android_link = 'market://details?id=com.circlecube.articlesoffaith';
+var android_web_link = 'https://play.google.com/store/apps/details?id=com.circlecube.articlesoffaith';
+var ios_ios_link = 'http://appstore.com/lds-articles-of-faith';
+var ios_web_link = 'http://appstore.com/lds-articles-of-faith';
+var store_link = android_android_link;
+var web_link = 'https://ldsmormonapps.com/app/lds-articles-of-faith/';
+
 var langs = {
 	english: { 
 		language_native: "English", 
@@ -254,6 +267,24 @@ jQuery(document).ready(function($) {
 		if (localStorage.activity_log){
 			activity_log = JSON.parse(localStorage.activity_log);
 		}
+		
+		//platform check
+		if (devicePlatform == 'Android') {
+			//update links to point to play market
+			store_link = android_android_link;
+			// web_link = android_web_link;
+		}
+		else if (devicePlatform == 'iOS') {
+			//update links to point to itunes store
+			
+			//remove more apps - in the future update apps with links to itunes apps
+			$('.more_apps').parent('li').remove();
+			
+			//update share links
+			store_link = ios_ios_link;
+			// web_link = ios_web_link;
+			
+		}
 
 		has_class_no_touch = $('html').hasClass('no-touch');
 		//reset log
@@ -445,10 +476,10 @@ jQuery(document).ready(function($) {
 		share_message += ' Take the test in this mobile app!';
 		share_message += '#lds #articlesoffaith';
 		share_subject = langs[language].title_plural;
-		console.log(share_message, share_subject, share_url);
+		console.log(share_message, share_subject, web_link);
 		window.plugins.socialsharing.available(function(isAvailable) {
 		    if (isAvailable) {
-				window.plugins.socialsharing.share(share_message, share_subject, share_files, share_url );
+				window.plugins.socialsharing.share(share_message, share_subject, share_files, web_link );
 		    }
 		});
 		gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Share", "Menu", quiz_article, score);
@@ -458,10 +489,10 @@ jQuery(document).ready(function($) {
 		share_message += ' I do! I got ' + $('.button_share').data('score') + '% correct on the ' + $('.button_share').data('article') + '!';
 		share_message += '#lds #articlesoffaith';
 		share_subject = langs[language].title_plural;
-		console.log(share_message, share_subject, share_url);
+		console.log(share_message, share_subject, web_link);
 	  	window.plugins.socialsharing.available(function(isAvailable) {
 		    if (isAvailable) {
-				window.plugins.socialsharing.share(share_message, share_subject, share_files, share_url );
+				window.plugins.socialsharing.share(share_message, share_subject, share_files, web_link );
 		    }
 		});
 	  	gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Share", "Level", quiz_article, score);
