@@ -1,7 +1,7 @@
 /*
 
 */
-var gaPlugin;
+// var gaPlugin;
 var activity_log = [];
 var touching = false;
 var keep_log = true;
@@ -269,22 +269,22 @@ jQuery(document).ready(function($) {
 		}
 		
 		//platform check
-		if (devicePlatform == 'Android') {
-			//update links to point to play market
-			store_link = android_android_link;
-			// web_link = android_web_link;
-		}
-		else if (devicePlatform == 'iOS') {
-			//update links to point to itunes store
+		// if (devicePlatform == 'Android') {
+		// 	//update links to point to play market
+		// 	store_link = android_android_link;
+		// 	// web_link = android_web_link;
+		// }
+		// else if (devicePlatform == 'iOS') {
+		// 	//update links to point to itunes store
 			
-			//remove more apps - in the future update apps with links to itunes apps
-			$('.more_apps').parent('li').remove();
+		// 	//remove more apps - in the future update apps with links to itunes apps
+		// 	$('.more_apps').parent('li').remove();
 			
-			//update share links
-			store_link = ios_ios_link;
-			// web_link = ios_web_link;
+		// 	//update share links
+		// 	store_link = ios_ios_link;
+		// 	// web_link = ios_web_link;
 			
-		}
+		// }
 
 		has_class_no_touch = $('html').hasClass('no-touch');
 		//reset log
@@ -300,9 +300,9 @@ jQuery(document).ready(function($) {
 	function onDeviceReady() {
 		//https://github.com/phonegap-build/GAPlugin/blob/c928e353feb1eb75ca3979b129b10b216a27ad59/README.md
 		//gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Button", "Click", "event only", 1);
-	    gaPlugin = window.plugins.gaPlugin;
-	    gaPlugin.init(nativePluginResultHandler, nativePluginErrorHandler, "UA-1466312-11", 10);
-		gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "App", "Begin", quiz_article);
+	    // gaPlugin = window.plugins.gaPlugin;
+	    // gaPlugin.init(nativePluginResultHandler, nativePluginErrorHandler, "UA-1466312-11", 10);
+		// gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "App", "Begin", quiz_article);
 
 	}
 	
@@ -471,32 +471,32 @@ jQuery(document).ready(function($) {
 		$(this).remove();
 		game_aofs();
 	});
-	$('.share').on('click touch', function(e){
-		share_message = 'Do you know the Articles of Faith?';
-		share_message += ' Take the test in this mobile app!';
-		share_message += '#lds #articlesoffaith';
-		share_subject = langs[language].title_plural;
-		console.log(share_message, share_subject, web_link);
-		window.plugins.socialsharing.available(function(isAvailable) {
-		    if (isAvailable) {
-				window.plugins.socialsharing.share(share_message, share_subject, share_files, web_link );
-		    }
-		});
-		gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Share", "Menu", quiz_article, score);
-	});
-	$('.content').on('click touch', '.button_share', function(e){
-		share_message = 'Do you know the Articles of Faith?';
-		share_message += ' I do! I got ' + $('.button_share').data('score') + '% correct on the ' + $('.button_share').data('article') + '!';
-		share_message += '#lds #articlesoffaith';
-		share_subject = langs[language].title_plural;
-		console.log(share_message, share_subject, web_link);
-	  	window.plugins.socialsharing.available(function(isAvailable) {
-		    if (isAvailable) {
-				window.plugins.socialsharing.share(share_message, share_subject, share_files, web_link );
-		    }
-		});
-	  	gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Share", "Level", quiz_article, score);
-	});
+	// $('.share').on('click touch', function(e){
+	// 	share_message = 'Do you know the Articles of Faith?';
+	// 	share_message += ' Take the test in this mobile app!';
+	// 	share_message += '#lds #articlesoffaith';
+	// 	share_subject = langs[language].title_plural;
+	// 	console.log(share_message, share_subject, web_link);
+	// 	window.plugins.socialsharing.available(function(isAvailable) {
+	// 	    if (isAvailable) {
+	// 			window.plugins.socialsharing.share(share_message, share_subject, share_files, web_link );
+	// 	    }
+	// 	});
+	// 	gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Share", "Menu", quiz_article, score);
+	// });
+	// $('.content').on('click touch', '.button_share', function(e){
+	// 	share_message = 'Do you know the Articles of Faith?';
+	// 	share_message += ' I do! I got ' + $('.button_share').data('score') + '% correct on the ' + $('.button_share').data('article') + '!';
+	// 	share_message += '#lds #articlesoffaith';
+	// 	share_subject = langs[language].title_plural;
+	// 	console.log(share_message, share_subject, web_link);
+	//   	window.plugins.socialsharing.available(function(isAvailable) {
+	// 	    if (isAvailable) {
+	// 			window.plugins.socialsharing.share(share_message, share_subject, share_files, web_link );
+	// 	    }
+	// 	});
+	//   	gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Share", "Level", quiz_article, score);
+	// });
 	$('.options_toggle').on('click touch', function(){
 		$('.options').toggleClass('active');
 	})
@@ -779,7 +779,7 @@ jQuery(document).ready(function($) {
 				$('.unordered').addClass('empty');
 				$('.button_skip').text( langs[language].next );
 				$('.button_skip').after( "<div class='button button_again'>" + langs[language].again + "</div>" );
-				$('.button_skip').after( "<div class='button button_share' data-score='" + score + "' data-article='" + langs[language].ordinals[quiz_article] + " " + langs[language].title + "'>" + langs[language].share + "</div>" );
+				// $('.button_skip').after( "<div class='button button_share' data-score='" + score + "' data-article='" + langs[language].ordinals[quiz_article] + " " + langs[language].title + "'>" + langs[language].share + "</div>" );
 				$('dt').append(" - " + score + "%");
 
 				if ( keep_log ) {
@@ -806,7 +806,7 @@ To track an event, call (oddly enough) trackEvent(). trackEvent takes 6 argument
 5)  eventLabel - A label that describes the event such as Button title or Menu Item name.
 6)  eventValue - An application defined integer value that can mean whatever you want it to mean.
 */
-				gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Level", "Finish", quiz_article, score);
+				// gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Level", "Finish", quiz_article, score);
 			}
 			//console.log('score :', quiz_guesses_correct / quiz_guesses_total);
 		}
@@ -886,8 +886,8 @@ To track an event, call (oddly enough) trackEvent(). trackEvent takes 6 argument
 		//console.log('nativePluginErrorHandler', 'fail');
 	}
 	function goingAway() {
-		gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "App", "End", quiz_article);
-	    gaPlugin.exit(nativePluginResultHandler, nativePluginErrorHandler);
+		// gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "App", "End", quiz_article);
+	    // gaPlugin.exit(nativePluginResultHandler, nativePluginErrorHandler);
 	}
 
 
