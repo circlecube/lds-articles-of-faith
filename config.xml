@@ -38,7 +38,7 @@
     
     <!-- Androind -->
     <platform name="android">
-        <!-- <icon src="res/android/mdpi.png" platform="android" qualifier="mdpi" /> -->
+        <icon src="res/android/mdpi.png" platform="android" qualifier="mdpi" />
         <icon src="res/android/hdpi.png" platform="android" qualifier="hdpi" />
         <icon src="res/android/xhdpi.png" platform="android" qualifier="xhdpi" />
         <icon src="res/android/xxhdpi.png" platform="android" qualifier="xxhdpi" />
@@ -77,15 +77,8 @@
 </widget>
 
 <!-- 
-
-
-
-     android: ldsquiz.keystore
+     android: statequiz.keystore
      ios: articles of faith
-     
-     
-     
-     
      Bundle ID- The bundle ID must match the one you used in Xcode. It can't be changed after you submit your first build.
      com.circlecube.articlesoffaith
      Apple ID- An automatically generated ID assigned to your app.
